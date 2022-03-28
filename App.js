@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 // React Native Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// Components
+import Login from './Components/Login/Login';
+import Tabs from './Components/Tabs/Tabs';
 
 const Stack = createNativeStackNavigator();
 
