@@ -22,7 +22,7 @@ export default class Tabs extends Component {
       >
         <Tab.Screen
           name="Notifications"
-          children={() => <Notification />}
+          children={() => <Notifications />}
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) =>
@@ -60,7 +60,7 @@ export default class Tabs extends Component {
                   iconStyle={styles.homeIconStyle}
                 />
               ),
-            tabBarButton: (props) => <CoustomTabBTN {...props} />,
+            // tabBarButton: (props) => <CoustomTabBTN {...props} />,
           }}
         />
         <Tab.Screen
