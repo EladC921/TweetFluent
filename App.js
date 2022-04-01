@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform, DrawerLayoutAndroid, SafeAreaView } from 'react-native';
 // React Native Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Components
-import Login from './Components/Login/Login';
-import Tabs from './Components/Tabs/Tabs';
+import Login from './Components/Login';
+import Tabs from './Components/Tabs';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +33,5 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
 
 const styles = StyleSheet.create({});
