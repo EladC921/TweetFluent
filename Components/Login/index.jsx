@@ -3,9 +3,9 @@ import React from "react";
 
 const Login = ({ navigation }) => {
   return (
-    <View>
-      <Text>Login</Text>
+    <View style={styles.container}>
       <TouchableOpacity
+        style={styles.btn}
         onPress={() => {
           navigation.navigate("Main");
         }}
@@ -18,4 +18,17 @@ const Login = ({ navigation }) => {
 
 export default Login;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  btn: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+    margin: 10,
+  },
+});

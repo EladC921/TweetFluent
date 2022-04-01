@@ -3,7 +3,7 @@ import React, { Component } from "react";
 // React Native Navigation
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Components
-import Home from "../Home/Home";
+import Home from "../Home";
 import Notifications from "../Notifications/Notifications";
 import Profile from "../User/Profile";
 // External
