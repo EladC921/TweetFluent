@@ -3,10 +3,11 @@ import {React,useState} from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { tweets } from "../../mockData/tweets";
 // Components
-import InfluencerCard from "../InfCard";
+import Tweet from "../Tweet";
+import InfluencerCard from "../InfCard/InfluencerCard";
 const renderItem = ({ item }) => (
   <View style={{ marginRight: 10, marginLeft: 10 }}>
-    <Tweet tweet={item} />
+    <InfluencerCard influencer={item} />
   </View>
 );
 const ChooseCategory = () => {
