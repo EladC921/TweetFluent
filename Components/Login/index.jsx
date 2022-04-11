@@ -7,7 +7,7 @@ const Login = ({ navigation }) => {
       <TouchableOpacity
         style={styles.btn}
         onPress={() => {
-          navigation.navigate("Main");
+          navigation.navigate("Search");
         }}
       >
         <Text>Go to Home</Text>
