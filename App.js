@@ -30,6 +30,14 @@ export default function App() {
             gestureEnabled: false,
           }}
         />
+         <Stack.Screen
+          name="Search"
+          component={ChooseCategory}
+          options={{
+            headerShown: false,
+            gestureEnabled: false,
+          }}
+        />
 
       </Stack.Navigator>
     </NavigationContainer>
