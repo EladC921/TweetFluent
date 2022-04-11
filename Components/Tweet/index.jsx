@@ -9,6 +9,7 @@ import { Icon } from "react-native-elements";
 const Tweet = (props) => {
   const tweet = props.tweet;
 
+  // date formatting method (tweet created at)
   const dateFormat = (date) => {
     const months = [
       "Jan",

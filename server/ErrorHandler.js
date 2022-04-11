@@ -1,4 +1,5 @@
 export class ErrorHandler {
+    error;
     constructor(error) {
         this.error = error;
     }
