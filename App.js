@@ -29,6 +29,7 @@ export default function App() {
             gestureEnabled: false,
           }}
         />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );
