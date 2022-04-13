@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Login = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      <Text>Login</Text>
       <TouchableOpacity
         style={styles.btn}
         onPress={() => {

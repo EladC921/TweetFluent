@@ -1,12 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import InfluencerProfile from "../Influencer/InfluencerProfile";
 
 const Notifications = () => {
-  return (
-    <View>
-      <Text>Notifications</Text>
-    </View>
-  );
+  return <InfluencerProfile />;
 };
 
 export default Notifications;
