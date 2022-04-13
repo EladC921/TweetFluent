@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Components
 import Home from "../Home";
 import Notifications from "../Notifications/Notifications";
-import Profile from "../User/Profile";
+import Profile from "../User/UserProfile";
 // External
 import { Icon } from "react-native-elements";
 
