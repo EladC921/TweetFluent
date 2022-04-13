@@ -7,6 +7,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from './Components/Login';
 import Tabs from './Components/Tabs';
 import ChooseCategory from './Components/Search/ChooseCategory';
+import Notifications from './Components/Notifications/Notifications';
+import UserProfile from './Components/User/UserProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +34,7 @@ export default function App() {
         />
          <Stack.Screen
           name="Search"
-          component={ChooseCategory}
+          component={UserProfile}
           options={{
             headerShown: false,
             gestureEnabled: false,
