@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const InfluencerProfile = () => {
   return (
