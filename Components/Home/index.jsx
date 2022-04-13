@@ -6,10 +6,14 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  Image,
 } from "react-native";
 import React from "react";
+// logo
+import logo from "../../assets/logo.png";
 // Global Styles
 import global from "../../styles/global";
+import root from "../../styles/root.json";
 import { Icon } from "react-native-elements";
 // const tweets - mock data
 import { tweets } from "../../mockData/tweets";
@@ -22,30 +26,34 @@ const renderItem = ({ item }) => (
   </View>
 );
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.header}>
-        <View style={styles.backBtnContainer}>
-          <TouchableOpacity>
+        <View style={styles.logoContainer}>
+          <Image source={logo} style={styles.logo} />
+        </View>
+        <View style={styles.searchContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Search");
+            }}
+          >
             <Icon
-              name="chevron-back-outline"
-              type="ionicon"
-              color="#F8F8F8"
-              iconStyle={{ fontWeight: "1600" }}
-              style={styles.backBtn}
+              name="search"
+              type="evilicon"
+              color={root.secondary}
+              iconStyle={{ fontWeight: "1600", fontSize: 40 }}
             />
           </TouchableOpacity>
-        </View>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Hello User</Text>
         </View>
       </View>
       <View style={styles.body}>
         <View style={styles.bodyTitleContainer}>
-          <Text style={styles.bodyTitle}>
-            Check out new tweets of your interests!
-          </Text>
+          <Text style={styles.bodyTitle}>Check out new tweets!</Text>
+          <TouchableOpacity style={styles.filterBtn}>
+            <Text style={styles.filterBtnText}>Filter</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.tweetsWrapper}>
           <View style={styles.tweetsContainer}>
@@ -74,9 +82,12 @@ const styles = StyleSheet.create({
   },
 
   header: {
+    position: "relative",
     backgroundColor: "#20232A",
     paddingTop: "10%",
     flex: 1,
+    height: "100%",
+    width: "100%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -85,30 +96,67 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 
-  backBtnContainer: {
+  searchContainer: {
+    position: "absolute",
+    left: 20,
+    bottom: 20,
+  },
+
+  logoContainer: {
     flex: 1,
-    alignItems: "flex-start",
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
 
-  backBtn: {
-    width: 16,
-  },
-
-  titleContainer: {
+  logo: {
     flex: 1,
-    alignItems: "flex-end",
+    width: "60%",
+    height: "100%",
+    shadowOffset: { width: 0, height: 0 },
+    shadowColor: root.twitter,
+    shadowOpacity: 0.6,
+    shadowRadius: 10,
   },
 
-  title: {
-    color: "#F8F8F8",
-    fontSize: 16,
-    fontWeight: "600",
+  filterBtn: {
+    backgroundColor: root.twitter,
+    padding: 7,
+    borderRadius: 30,
+    marginLeft: "auto",
+    marginTop: 5,
+    width: "auto",
+  },
+
+  filterBtnText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "bold",
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingRight: 10,
+    paddingLeft: 10,
   },
 
   body: {
     backgroundColor: "rgba(32, 35, 39, 0.8)",
     flex: 10,
     height: "100%",
+  },
+
+  bodyTitleContainer: {
+    paddingTop: "5%",
+    paddingLeft: "5%",
+    paddingRight: "5%",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+  },
+
+  bodyTitle: {
+    color: "#F8F8F8",
+    fontSize: 16,
+    fontWeight: "600",
   },
 
   tweetsWrapper: {

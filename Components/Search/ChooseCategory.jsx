@@ -1,10 +1,9 @@
-import { StyleSheet,Picker, Text, View,Button, FlatList} from "react-native";
-import {React,useState} from "react";
-import { Dropdown } from "react-native-element-dropdown";
+import { StyleSheet, Picker, Text, View, Button, FlatList } from "react-native";
+import { React, useState } from "react";
 import { tweets } from "../../mockData/tweets";
 // Components
 import Tweet from "../Tweet";
-import InfluencerCard from "../InfCard/InfluencerCard";
+import InfluencerCard from "../Influencer/InfluencerCard";
 const renderItem = ({ item }) => (
   <View style={{ marginRight: 10, marginLeft: 10 }}>
     <InfluencerCard influencer={item} />
@@ -25,69 +24,36 @@ const ChooseCategory = () => {
     { label: "Israel", value: "isr" },
     { label: "United States", value: "us" },
   ];
-  
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.dropdownContainer}>
-      <Text style={{ fontWeight: "600",paddingTop:30 }}>Choose Category</Text>
-      <Dropdown
-            style={styles.dropdown}
-            placeholderStyle={[styles.placeholderStyle]}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={CategoryType}
-            maxHeight={170}
-            labelField="label"
-            valueField="value"
-            placeholder={"select"}
-            value={value}
-            onChange={(item) => {
-              setValue(item.value);
-            }}  
-          />
-           <Text style={{ fontWeight: "600" ,paddingTop:30}}>Choose Country</Text>
-           <Dropdown
-            style={styles.dropdown}
-            placeholderStyle={[styles.placeholderStyle]}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
-            data={Country}
-            maxHeight={170}
-            labelField="label"
-            valueField="value"
-            placeholder={"select"}
-            value={value}
-            onChange={(item) => {
-              setValue(item.value);
-            }}  
-          />
-    <View style={styles.searchBut}>
+        <Text style={{ fontWeight: "600", paddingTop: 30 }}>
+          Choose Category
+        </Text>
+        {/** Dropdown */}
+        <Text style={{ fontWeight: "600", paddingTop: 30 }}>
+          Choose Country
+        </Text>
+        {/** Dropdown */}
+        <View style={styles.searchBut}>
           <Button
-  color="blue"
-  title="Search"
-  
-  accessibilityLabel="Learn more about this purple button"
-/>
-          </View>
-
+            color="blue"
+            title="Search"
+            accessibilityLabel="Learn more about this purple button"
+          />
+        </View>
       </View>
-  
-          <View style={styles.results}>
-          {tweets.length > 0 && (
-              <FlatList
-                data={tweets}
-                keyExtractor={(item) => item.Tid}
-                renderItem={renderItem}
-              ></FlatList>
-            )}
-
-          </View>
-      
+      <View style={styles.results}>
+        {tweets.length > 0 && (
+          <FlatList
+            data={tweets}
+            keyExtractor={(item) => item.Tid}
+            renderItem={renderItem}
+          ></FlatList>
+        )}
+      </View>
     </View>
-    
   );
 };
 
@@ -97,10 +63,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 40,
-    alignItems: "center"
+    alignItems: "center",
   },
   results: {
-    flex:3,
+    flex: 3,
     position: "relative",
     top: -10,
     borderRadius: 20,
@@ -110,12 +76,11 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   searchBut: {
-  paddingTop:10,
- 
-  alignItems:"center",
-  justifyContent: 'center',
-  borderRadius:20,
-  
+    paddingTop: 10,
+
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
   },
   dropdown: {
     width: "70%",
@@ -128,7 +93,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   dropdownContainer: {
-    flex:2,
+    flex: 2,
     position: "relative",
     top: -10,
     borderRadius: 20,

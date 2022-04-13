@@ -1,14 +1,7 @@
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList
-} from 'react-native';
+import React, { Component } from "react";
+import { StyleSheet, Text, View, Image, FlatList } from "react-native";
 import { tweets } from "../../mockData/tweets";
-import InfluencerCard from "../InfCard/InfluencerCard";
-import SearchBar from "react-native-dynamic-search-bar";
+import InfluencerCard from "../Influencer/InfluencerCard";
 const renderItem = ({ item }) => (
   <View style={{ marginRight: 10, marginLeft: 10 }}>
     <InfluencerCard influencer={item} />
@@ -18,54 +11,51 @@ const renderItem = ({ item }) => (
 const UserProfile = (props) => {
   return (
     <View style={styles.container}>
-    <View style={styles.header}>
-      <View style={styles.headerContent}>
-          <Image style={styles.avatar}
-            source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: "https://bootdey.com/img/Content/avatar/avatar6.png",
+            }}
+          />
 
           <Text style={styles.name}>John Doe </Text>
           <Text style={styles.userInfo}>Following: </Text>
           <Text style={styles.userInfo}>influencers you follow: </Text>
-          <SearchBar
-  placeholder="Search here"
-  onPress={() => alert("onPress")}
-  onChangeText={(text) => console.log(text)}
-/>
+          {/** Search Bar */}
+        </View>
+      </View>
+
+      <View style={styles.body}>
+        <View style={styles.results}>
+          {tweets.length > 0 && (
+            <FlatList
+              data={tweets}
+              keyExtractor={(item) => item.Tid}
+              renderItem={renderItem}
+            ></FlatList>
+          )}
+        </View>
       </View>
     </View>
-
-    <View style={styles.body}>
-    <View style={styles.results}>
-          {tweets.length > 0 && (
-              <FlatList
-                data={tweets}
-                keyExtractor={(item) => item.Tid}
-                renderItem={renderItem}
-              ></FlatList>
-            )}
-
-          </View>
-
-    </View>
-</View>
   );
 };
 
 export default UserProfile;
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     backgroundColor: "#DCDCDC",
-    flex:1,
+    flex: 1,
   },
-  header:{
+  header: {
     backgroundColor: "#DCDCDC",
-    flex:2,
+    flex: 2,
   },
-  headerContent:{
-    padding:30,
-    alignItems: 'center',
-    
+  headerContent: {
+    padding: 30,
+    alignItems: "center",
   },
   avatar: {
     width: 130,
@@ -73,39 +63,36 @@ const styles = StyleSheet.create({
     borderRadius: 63,
     borderWidth: 4,
     borderColor: "white",
-    marginBottom:10,
-    
+    marginBottom: 10,
   },
-  name:{
-    fontSize:22,
-    color:"#000000",
-    fontWeight:'600',
+  name: {
+    fontSize: 22,
+    color: "#000000",
+    fontWeight: "600",
   },
-  userInfo:{
-    fontSize:16,
-    color:"#778899",
-    fontWeight:'600',
+  userInfo: {
+    fontSize: 16,
+    color: "#778899",
+    fontWeight: "600",
   },
-  body:{
-    borderRadius:20,
+  body: {
+    borderRadius: 20,
     backgroundColor: "#778899",
-    flex:3,
-    alignItems:'center',
+    flex: 3,
+    alignItems: "center",
   },
-  item:{
-    flexDirection : 'row',
+  item: {
+    flexDirection: "row",
   },
 
-
- 
   results: {
-   
     position: "relative",
     top: -10,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    marginTop:20,
+    marginTop: 20,
     width: "90%",
+    height: "100%",
   },
 });

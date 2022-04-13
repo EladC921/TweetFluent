@@ -6,9 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Components
 import Login from './Components/Login';
 import Tabs from './Components/Tabs';
-import ChooseCategory from './Components/Search/ChooseCategory';
-import Notifications from './Components/Notifications/Notifications';
-import UserProfile from './Components/User/UserProfile';
+import Search from './Components/Search';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,15 +30,14 @@ export default function App() {
             gestureEnabled: false,
           }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Search"
-          component={UserProfile}
+          component={Search}
           options={{
             headerShown: false,
             gestureEnabled: false,
           }}
         />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
