@@ -2,5 +2,6 @@
   "main": "#000",
   "secondary": "#969696",
   "text": "#e0e0e0",
-  "button": "#ffffff"
+  "button": "#ffffff",
+  "twitter": "#1DA1F2"
 }
