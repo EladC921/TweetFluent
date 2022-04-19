@@ -109,14 +109,14 @@ const Tweet = (props) => {
             />
             <Text style={styles.iconTxt}>{tweet.LikesCount}</Text>
           </View>
-          <Text style={styles.icon}>
+          <View style={styles.icon}>
             <Icon
               name="external-link"
               type="evilicon"
               color={root.secondary}
               iconStyle={{ fontWeight: "1600", fontSize: 25 }}
             />
-          </Text>
+          </View>
         </View>
       </View>
     </View>
