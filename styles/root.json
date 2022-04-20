@@ -1,7 +1,10 @@
 {
   "main": "#000",
-  "secondary": "#969696",
-  "text": "#e0e0e0",
-  "button": "#ffffff",
-  "twitter": "#1DA1F2"
+  "secondary": "#657786",
+  "tertiary": "#aab8c2",
+  "light": "#e1e8ed",
+  "buttonLight": "#ffffff",
+  "buttonDark": "#243447",
+  "twitter": "#1DA1F2",
+  "bg": "#f5f8fa"
 }
