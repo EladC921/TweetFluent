@@ -6,8 +6,29 @@ import root from "../../styles/root";
 // icon
 import { Icon } from "react-native-elements";
 
+/**
+ * A Tweet component - looks like a tweet from Twitter, reusable.
+ * @param {*} props Tweet object (id, user(screen name, name, profile pic), is verified, text, created at, media?)
+ */
 const Tweet = (props) => {
   const tweet = props.tweet;
+
+  // format .NET DateTime to JS Date
+  const formatToJSDate = (d) => {
+    let date = new Date(d).toISOString().split("T")[0];
+    let time = new Date(d).toISOString().split("T")[1].split("Z")[0];
+    let dateVar = date.split("-");
+    let timeVar = time.split(":");
+
+    return new Date(
+      dateVar[0],
+      dateVar[1] - 1,
+      dateVar[2],
+      timeVar[0],
+      timeVar[1],
+      timeVar[2]
+    );
+  };
 
   // date formatting method (tweet created at)
   const dateFormat = (date) => {
@@ -44,7 +65,8 @@ const Tweet = (props) => {
     return ` ‧ ${month} ${day}, ${year}`;
   };
 
-  const createdAtStr = dateFormat(tweet.CreatedAt);
+  const createdAtStr = dateFormat(formatToJSDate(tweet.CreatedAt));
+
   const imgUrl = {
     uri: `https://img.buzzfeed.com/buzzfeed-static/static/2017-03/31/13/enhanced/buzzfeed-prod-fastlane-02/original-grid-image-14740-1490981786-4.jpg?crop=590:590;5,0`,
   };
@@ -52,70 +74,72 @@ const Tweet = (props) => {
     uri: tweet.Media,
   };
   return (
-    <View style={[styles.wrapper, global.shadowLight]}>
-      <View style={styles.leftContainer}>
-        <View style={styles.imgContainer}>
-          <Image style={[styles.img, global.shadowDark]} source={imgUrl} />
+    <View style={global.shadowDark}>
+      <View style={styles.wrapper}>
+        <View style={styles.leftContainer}>
+          <View style={styles.imgContainer}>
+            <Image style={[styles.img, global.shadowDark]} source={imgUrl} />
+          </View>
         </View>
-      </View>
-      <View style={styles.rightContainer}>
-        <View style={styles.nameContainer}>
-          <Text style={styles.name}>{tweet.User.Name}</Text>
-          {
-            /** Credits: <a href="https://www.flaticon.com/free-icons/verified" title="verified icons">Verified icons created by Stockio - Flaticon</a> */
-            tweet.User.IsVerified && (
-              <Image
-                source={require("../../assets/verified.png")}
-                style={styles.verified}
+        <View style={styles.rightContainer}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.name}>{tweet.Influ.Name}</Text>
+            {
+              /** Credits: <a href="https://www.flaticon.com/free-icons/verified" title="verified icons">Verified icons created by Stockio - Flaticon</a> */
+              tweet.Influ.IsVerified && (
+                <Image
+                  source={require("../../assets/verified.png")}
+                  style={styles.verified}
+                />
+              )
+            }
+            <Text style={styles.screenName}> @{tweet.Influ.ScreenName}</Text>
+            <Text style={styles.date}>{createdAtStr}</Text>
+          </View>
+          <View style={styles.txtContainer}>
+            <Text style={styles.txt}>{tweet.Txt}</Text>
+          </View>
+          {!!tweet.MediaUrl && (
+            <View style={styles.media}>
+              <Image style={styles.mediaImg} source={mediaUrl} />
+            </View>
+          )}
+          <View style={styles.footer}>
+            <View style={styles.icon}>
+              <Icon
+                name="comment"
+                type="evilicon"
+                color={root.secondary}
+                iconStyle={{ fontWeight: "1600", fontSize: 25 }}
               />
-            )
-          }
-          <Text style={styles.screenName}> @{tweet.User.ScreenName}</Text>
-          <Text style={styles.date}>{createdAtStr}</Text>
-        </View>
-        <View style={styles.txtContainer}>
-          <Text style={styles.txt}>{tweet.Txt}</Text>
-        </View>
-        {!!tweet.Media && (
-          <View style={styles.media}>
-            <Image style={styles.mediaImg} source={mediaUrl} />
-          </View>
-        )}
-        <View style={styles.footer}>
-          <View style={styles.icon}>
-            <Icon
-              name="comment"
-              type="evilicon"
-              color={root.secondary}
-              iconStyle={{ fontWeight: "1600", fontSize: 25 }}
-            />
-            <Text style={styles.iconTxt}>{tweet.RepliesCount}</Text>
-          </View>
-          <View style={styles.icon}>
-            <Icon
-              name="retweet"
-              type="evilicon"
-              color={root.secondary}
-              iconStyle={{ fontWeight: "1600", fontSize: 25 }}
-            />
-            <Text style={styles.iconTxt}>{tweet.RetweetsCount}</Text>
-          </View>
-          <View style={styles.icon}>
-            <Icon
-              name="heart"
-              type="evilicon"
-              color={root.secondary}
-              iconStyle={{ fontWeight: "1600", fontSize: 25 }}
-            />
-            <Text style={styles.iconTxt}>{tweet.LikesCount}</Text>
-          </View>
-          <View style={styles.icon}>
-            <Icon
-              name="external-link"
-              type="evilicon"
-              color={root.secondary}
-              iconStyle={{ fontWeight: "1600", fontSize: 25 }}
-            />
+              <Text style={styles.iconTxt}>{tweet.RepliesCount}</Text>
+            </View>
+            <View style={styles.icon}>
+              <Icon
+                name="retweet"
+                type="evilicon"
+                color={root.secondary}
+                iconStyle={{ fontWeight: "1600", fontSize: 25 }}
+              />
+              <Text style={styles.iconTxt}>{tweet.RetweetCount}</Text>
+            </View>
+            <View style={styles.icon}>
+              <Icon
+                name="heart"
+                type="evilicon"
+                color={root.secondary}
+                iconStyle={{ fontWeight: "1600", fontSize: 25 }}
+              />
+              <Text style={styles.iconTxt}>{tweet.LikesCount}</Text>
+            </View>
+            <View style={styles.icon}>
+              <Icon
+                name="external-link"
+                type="evilicon"
+                color={root.secondary}
+                iconStyle={{ fontWeight: "1600", fontSize: 25 }}
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -129,12 +153,13 @@ const styles = StyleSheet.create({
   wrapper: {
     padding: "0.5%",
     display: "flex",
-    backgroundColor: "#f2efe3",
+    backgroundColor: root.bg,
     overflow: "hidden",
     minHeight: 100,
     width: "100%",
-    marginBottom: 10,
-    borderRadius: 20,
+    marginBottom: 5,
+    marginTop: 5,
+    // borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -162,7 +187,7 @@ const styles = StyleSheet.create({
   },
 
   screenName: {
-    color: root.secondary,
+    color: root.tertiary,
     fontSize: 12,
     marginLeft: 2,
   },
@@ -222,12 +247,15 @@ const styles = StyleSheet.create({
 
   txt: {
     flexWrap: "wrap",
+    fontFamily: "Helvetica Neue",
+    fontSize: 13.5,
     paddingTop: 5,
-    paddingRight: 5,
+    paddingRight: 10,
+    paddingBottom: 5,
   },
 
   date: {
-    color: root.secondary,
+    color: root.tertiary,
     fontSize: 12,
   },
 
@@ -249,6 +277,6 @@ const styles = StyleSheet.create({
 
   iconTxt: {
     paddingLeft: 8,
-    color: root.secondary,
+    color: root.tertiary,
   },
 });

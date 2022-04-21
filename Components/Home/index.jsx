@@ -2,13 +2,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
-  SafeAreaView,
   TouchableOpacity,
   FlatList,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 // logo
 import logo from "../../assets/logo.png";
 // Global Styles
@@ -16,20 +14,36 @@ import global from "../../styles/global";
 import root from "../../styles/root.json";
 import { Icon } from "react-native-elements";
 // const tweets - mock data
-import { tweets } from "../../mockData/tweets";
+// import { tweets } from "../../mockData/tweets";
 // Components
 import Tweet from "../Tweet";
+// Serverside
+import { TweetsService } from "../../server/TweetsService";
+import { ErrorHandler } from "../../server/ErrorHandler";
 
+// Redner Tweets
 const renderItem = ({ item }) => (
-  <View style={{ marginRight: 10, marginLeft: 10 }}>
+  <View style={{}}>
     <Tweet tweet={item} />
   </View>
 );
 
 const Home = ({ navigation }) => {
+  const [tweets, setTweets] = useState([]);
+  useEffect(() => {
+    // Get Tweets of Influencers that a user follows
+    let tweetsForUser = new TweetsService(`/TweetsForUser/1`);
+    tweetsForUser
+      .getAll()
+      .then((res) => {
+        setTweets(res);
+      })
+      .catch((err) => new ErrorHandler(err).log());
+  }, []);
+
   return (
     <View style={styles.wrapper}>
-      <View style={styles.header}>
+      <View style={[styles.header, global.shadowDark]}>
         <View style={styles.logoContainer}>
           <Image source={logo} style={styles.logo} />
         </View>
@@ -75,7 +89,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: "#fff",
+    backgroundColor: root.bg,
     display: "flex",
     height: "100%",
     width: "100%",
@@ -83,7 +97,7 @@ const styles = StyleSheet.create({
 
   header: {
     position: "relative",
-    backgroundColor: "#20232A",
+    backgroundColor: root.bg,
     paddingTop: "10%",
     flex: 1,
     height: "100%",
@@ -112,10 +126,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "60%",
     height: "100%",
-    shadowOffset: { width: 0, height: 0 },
-    shadowColor: root.twitter,
-    shadowOpacity: 0.6,
-    shadowRadius: 10,
   },
 
   filterBtn: {
@@ -138,7 +148,6 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    backgroundColor: "rgba(32, 35, 39, 0.8)",
     flex: 10,
     height: "100%",
   },
@@ -154,7 +163,7 @@ const styles = StyleSheet.create({
   },
 
   bodyTitle: {
-    color: "#F8F8F8",
+    color: root.secondary,
     fontSize: 16,
     fontWeight: "600",
   },

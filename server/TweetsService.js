@@ -1,12 +1,13 @@
 import { DataService } from "./DataService";
 
 export class TweetsService extends DataService {
-    constructor() {
+    constructor(suffix = '/') {
         super();
-        this.url = 'http://localhost:3000/api/Tweets';
+        this.url = 'https://proj.ruppin.ac.il/bgroup68/test2/tar1/api/Tweets' + suffix;
     }
 
     getAll() {
+        console.log(this.url);
         return super.getAll(this.url);
     }
 
