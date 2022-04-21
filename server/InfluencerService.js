@@ -1,14 +1,13 @@
 import { DataService } from "./DataService";
+import { apiUrl } from "./api-url";
 
 export class InfluencerService extends DataService {
   constructor(suffix = "/") {
     super();
-    this.url =
-      "https://proj.ruppin.ac.il/bgroup68/test2/tar1/api/Influencers" + suffix;
+    this.url = apiUrl.influencers + suffix;
   }
 
   getAll() {
-    console.log(this.url);
     return super.getAll(this.url);
   }
 
