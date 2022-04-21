@@ -5,17 +5,38 @@ import global from "../../styles/global";
 import root from "../../styles/root";
 // icon
 import { Icon } from "react-native-elements";
+// Serverside
+import { TweetsService } from "../../server/TweetsService";
+import { ErrorHandler } from "../../server/ErrorHandler";
 
-const InfluencerCard = (props) => {
-  const influencer = props.influencer;
+const InfluencerCard = ({ navigation, influencer }) => {
+  const goToInfluencerPage = () => {
+    let t = new TweetsService(`/GetInfluencerTweets/${influencer.Id}`);
 
-  useEffect(() => {
-    console.log("influCard");
-  }, []);
+    // Navigate to Influencer Page with his tweets and details
+    t.getAll()
+      .then((res) => {
+        navigation.navigate("InfluencerProfile", {
+          iid: influencer.Id,
+          params: { tweet: res, influ: influencer },
+        });
+      })
+      .catch((err) => new ErrorHandler(err).log());
+  };
 
   return (
-    <TouchableOpacity activeOpacity={0.5} style={global.shadowDark}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      style={global.shadowDark}
+      onPress={() => goToInfluencerPage()}
+    >
       <View style={styles.wrapper}>
+        {/* <View style={styles.categoryContainer}>
+          <Text>
+            {influencer.Categories[0]}
+            {console.log(influencer.Categories)}
+          </Text>
+        </View> */}
         <View style={styles.leftContainer}>
           <View style={styles.imgContainer}>
             <Image
@@ -64,13 +85,15 @@ export default InfluencerCard;
 
 const styles = StyleSheet.create({
   wrapper: {
+    position: "relative",
     padding: "0.5%",
+    marginTop: 5,
     display: "flex",
     backgroundColor: root.bg,
     overflow: "hidden",
     minHeight: 100,
     width: "100%",
-    marginBottom: 10,
+    marginBottom: 5,
     borderRadius: 20,
     flexDirection: "row",
     alignItems: "center",
@@ -82,6 +105,16 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "stretch",
     justifyContent: "flex-start",
+  },
+
+  categoryContainer: {
+    position: "absolute",
+    top: 0,
+    right: 5,
+    height: 50,
+    width: 40,
+    zIndex: 1,
+    backgroundColor: "red",
   },
 
   nameContainer: {

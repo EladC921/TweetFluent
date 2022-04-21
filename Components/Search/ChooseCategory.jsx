@@ -9,6 +9,7 @@ import root from "../../styles/root";
 
 const ChooseCategory = (props) => {
   const CategoryType = [
+    { label: "Select item", value: "-1" },
     { label: "Whisky", value: "whisky" },
     { label: "Wine", value: "wine" },
     { label: "Makeup", value: "makeup" },
@@ -22,18 +23,26 @@ const ChooseCategory = (props) => {
   const [currentCategoryVal, setCurrentCategoryVal] = useState(
     CategoryType[0].value
   );
-  const [currentCountryVal, setCurrentCountryVal] = useState(Country[0].val);
+  const [currentCountryVal, setCurrentCountryVal] = useState(Country[0].value);
 
   const [isFocusCategory, setIsFocusCategory] = useState(false);
   const [isFocusCountry, setIsFocusCountry] = useState(false);
 
   const searchInfluencers = () => {
+    props.setLoading(true);
+
+    // validation
+    if (currentCategoryVal === "-1") {
+      alert("Please select a category");
+      return;
+    }
+
     // Get  Influencers in subCategory
     let influencers = new InfluencerService(`/GetInfluByCategory/`);
     influencers
       .get(currentCategoryVal)
       .then((res) => {
-        console.log(res);
+        props.setLoading(false);
         props.setResultData(res);
       })
       .catch((err) => new ErrorHandler(err).log());
@@ -42,9 +51,7 @@ const ChooseCategory = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.dropdownContainer}>
-        <Text style={{ fontWeight: "600", paddingTop: 30 }}>
-          Choose Category
-        </Text>
+        <Text style={styles.inputLabel}>Choose Category</Text>
         <Dropdown
           style={[
             styles.dropdown,
@@ -64,14 +71,15 @@ const ChooseCategory = (props) => {
             setIsFocusCategory(false);
           }}
         />
-        <Text style={{ fontWeight: "600", paddingTop: 30 }}>
-          Choose Country
-        </Text>
+        <Text style={styles.inputLabel}>Choose Country</Text>
         <Dropdown
-          style={[styles.dropdown, isFocusCountry && { borderColor: "blue" }]}
+          style={[
+            styles.dropdown,
+            isFocusCountry && { borderColor: root.twitter },
+          ]}
           inputSearchStyle={styles.inputSearchStyle}
           data={Country}
-          maxHeight={300}
+          maxHeight={150}
           labelField="label"
           valueField="value"
           placeholder={!isFocusCountry ? currentCountryVal : "select"}
@@ -107,6 +115,7 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     flex: 2,
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     paddingLeft: 15,
   },
@@ -116,12 +125,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
+  inputLabel: {
+    color: root.secondary,
+    fontWeight: "600",
+    paddingTop: 10,
+    paddingBottom: 5,
+  },
   dropdown: {
     width: "100%",
-    height: 50,
+    height: 45,
     paddingHorizontal: 8,
-    borderRadius: 20,
-    borderWidth: 2,
+    borderRadius: 18,
+    borderWidth: 1.5,
+    borderColor: root.tertiary,
+    backgroundColor: root.bg,
   },
   selectedTextStyle: {
     color: "#676767",
@@ -141,7 +158,5 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 17,
   },
-  inputSearchStyle: {
-    backgroundColor: "white",
-  },
+  inputSearchStyle: {},
 });

@@ -4,9 +4,7 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  Button,
   Image,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import root from "../../styles/root.json";

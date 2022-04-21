@@ -5,28 +5,24 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Icon } from "react-native-elements";
+// Components
 import ChooseCategory from "./ChooseCategory";
-
+import InfluencerCard from "../Influencer/InfluencerCard";
 // styles
 import root from "../../styles/root";
 import global from "../../styles/global";
 
-import InfluencerCard from "../Influencer/InfluencerCard";
-const renderItem = ({ item }) => (
-  <View style={{ marginRight: 10, marginLeft: 10 }}>
-    {console.log(item)}
-    <InfluencerCard influencer={item} />
-  </View>
-);
-
 const Search = ({ navigation }) => {
   const [resultData, setResultData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    console.log(resultData);
-  }, [resultData]);
+  const renderItem = ({ item }) => (
+    <View style={{ marginRight: 10, marginLeft: 10 }}>
+      <InfluencerCard influencer={item} navigation={navigation} />
+    </View>
+  );
   return (
     <View style={styles.wrapper}>
       <View style={styles.backBtnContainer}>
@@ -40,14 +36,34 @@ const Search = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={[styles.searchContainer, global.shadowDark]}>
-        <ChooseCategory setResultData={setResultData} />
+        <ChooseCategory setResultData={setResultData} setLoading={setLoading} />
       </View>
       <View style={styles.resultContainer}>
-        <FlatList
-          data={resultData}
-          keyExtractor={(item) => item.Tid}
-          renderItem={renderItem}
-        ></FlatList>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <Icon
+              name="spinner"
+              type="evilicon"
+              color={root.secondary}
+              iconStyle={{ fontWeight: "1600", fontSize: 40 }}
+            />
+          </View>
+        ) : (
+          <>
+            {resultData.length > 0 && (
+              <View>
+                <Text style={styles.found}>
+                  Found {resultData.length} Influencers
+                </Text>
+              </View>
+            )}
+            <FlatList
+              data={resultData}
+              keyExtractor={(item) => item.Tid}
+              renderItem={renderItem}
+            ></FlatList>
+          </>
+        )}
       </View>
     </View>
   );
@@ -69,7 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: root.twitter,
   },
   searchContainer: {
-    flex: 3,
+    flex: 2.5,
     backgroundColor: root.light,
     paddingBottom: 15,
   },
@@ -77,5 +93,18 @@ const styles = StyleSheet.create({
   resultContainer: {
     flex: 8,
     paddingTop: 15,
+  },
+
+  found: {
+    color: root.secondary,
+    fontSize: 14,
+    paddingLeft: 10,
+    paddingBottom: 5,
+  },
+
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
