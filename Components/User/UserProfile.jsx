@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Image, FlatList } from "react-native";
 import { tweets } from "../../mockData/tweets";
 import InfluencerCard from "../Influencer/InfluencerCard";
+import root from "../../styles/root";
+
 const renderItem = ({ item }) => (
   <View style={{ marginRight: 10, marginLeft: 10 }}>
     <InfluencerCard influencer={item} />
@@ -46,11 +48,11 @@ export default UserProfile;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#DCDCDC",
+    backgroundColor: root.bg,
     flex: 1,
   },
   header: {
-    backgroundColor: "#DCDCDC",
+    backgroundColor: root.bg,
     flex: 2,
   },
   headerContent: {
@@ -62,22 +64,23 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 63,
     borderWidth: 4,
-    borderColor: "white",
+    borderColor: "#fff",
     marginBottom: 10,
   },
   name: {
     fontSize: 22,
-    color: "#000000",
+    color: root.main,
     fontWeight: "600",
   },
   userInfo: {
     fontSize: 16,
-    color: "#778899",
+    color: root.secondary,
     fontWeight: "600",
   },
   body: {
-    borderRadius: 20,
-    backgroundColor: "#778899",
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+    backgroundColor: root.light,
     flex: 3,
     alignItems: "center",
   },

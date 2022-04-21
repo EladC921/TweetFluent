@@ -1,4 +1,4 @@
-import { ErrorHandler } from "./errorHandler"
+import { ErrorHandler } from "./ErrorHandler"
 
 export class DataService {
     constructor() { }
@@ -10,7 +10,7 @@ export class DataService {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             }
-        }).then(response => response.json()).catch(err => new ErrorHandler(err).log())
+        }).then(response => response.json());
     }
 
     get(url, id) {
@@ -20,7 +20,7 @@ export class DataService {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             }
-        }).then(response => response.json()).catch(err => new ErrorHandler(err).log())
+        }).then(response => response.json());
     }
 
     post(url, data) {
@@ -31,7 +31,7 @@ export class DataService {
                 Accept: 'application/json',
             },
             body: JSON.stringify(data)
-        }).then(response => response.json()).catch(err => new ErrorHandler(err).log())
+        }).then(response => response.json());
     }
 
     put(url, data) {
@@ -42,7 +42,7 @@ export class DataService {
                 Accept: 'application/json',
             },
             body: JSON.stringify(data)
-        }).then(response => response.json()).catch(err => new ErrorHandler(err).log())
+        }).then(response => response.json());
     }
 
     delete(url, id) {
@@ -52,6 +52,6 @@ export class DataService {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             }
-        }).then(response => response.json()).catch(err => new ErrorHandler(err).log())
+        }).then(response => response.json());
     }
 }
