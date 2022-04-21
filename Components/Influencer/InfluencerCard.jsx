@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
 // global styles
 import global from "../../styles/global";
 import root from "../../styles/root";
@@ -9,24 +9,27 @@ import { Icon } from "react-native-elements";
 const InfluencerCard = (props) => {
   const influencer = props.influencer;
 
-  const imgUrl = {
-    uri: `https://img.buzzfeed.com/buzzfeed-static/static/2017-03/31/13/enhanced/buzzfeed-prod-fastlane-02/original-grid-image-14740-1490981786-4.jpg?crop=590:590;5,0`,
-  };
+  useEffect(() => {
+    console.log("influCard");
+  }, []);
 
   return (
-    <View style={global.shadowDark}>
+    <TouchableOpacity activeOpacity={0.5} style={global.shadowDark}>
       <View style={styles.wrapper}>
         <View style={styles.leftContainer}>
           <View style={styles.imgContainer}>
-            <Image style={[styles.img, global.shadowDark]} source={imgUrl} />
+            <Image
+              style={[styles.img, global.shadowDark]}
+              source={{ uri: influencer.ImgUrl }}
+            />
           </View>
         </View>
         <View style={styles.rightContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.name}>{influencer.User.Name}</Text>
+            <Text style={styles.name}>{influencer.Name}</Text>
             {
               /** Credits: <a href="https://www.flaticon.com/free-icons/verified" title="verified icons">Verified icons created by Stockio - Flaticon</a> */
-              influencer.User.IsVerified && (
+              influencer.IsVerified && (
                 <Image
                   source={require("../../assets/verified.png")}
                   style={styles.verified}
@@ -35,29 +38,25 @@ const InfluencerCard = (props) => {
             }
           </View>
           <View style={styles.screenameContainer}>
-            <Text style={styles.screenName}>
-              {" "}
-              @{influencer.User.ScreenName}
-            </Text>
+            <Text style={styles.screenName}>@{influencer.ScreenName}</Text>
           </View>
           <View style={styles.footer}>
             <View style={styles.icon}>
+              <Text style={styles.iconTxt}>{influencer.FollowersCount}</Text>
               <Text style={styles.footerTxt}>Followers</Text>
-              <Text style={styles.iconTxt}>{influencer.RepliesCount}</Text>
             </View>
             <View style={styles.icon}>
+              <Text style={styles.iconTxt}>{influencer.FollowingCount}</Text>
               <Text style={styles.footerTxt}>Following</Text>
-              <Text style={styles.iconTxt}>{influencer.RepliesCount}</Text>
             </View>
             <View style={styles.icon}>
-              <Text style={styles.footerTxt}>Subs</Text>
-              <Text style={styles.iconTxt}>{influencer.LikesCount}</Text>
+              <Text style={styles.iconTxt}>0</Text>
+              <Text style={styles.footerTxt}>subscribers</Text>
             </View>
-            <Text style={styles.icon}></Text>
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -178,13 +177,13 @@ const styles = StyleSheet.create({
 
   footer: {
     flex: 1,
-    paddingTop: 40,
-    paddingRight: 15,
-    paddingBottom: 10,
+    padding: 7,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomRightRadius: 15,
+    display: "flex",
+    flexDirection: "row",
   },
 
   footerTxt: {
@@ -194,9 +193,13 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    flexDirection: "row",
+    flex: 1,
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    padding: 5,
   },
 
   iconTxt: {
