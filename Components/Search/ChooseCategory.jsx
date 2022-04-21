@@ -1,14 +1,13 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { React, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
+import { InfluencerService } from "../../server/InfluencerService";
+import { ErrorHandler } from "../../server/ErrorHandler";
 
-const ChooseCategory = () => {
-  const [currentCategoryVal, setCurrentCategoryVal] = useState(null);
-  const [currentCountryVal, setCurrentCountryVal] = useState(null);
+//style
+import root from "../../styles/root";
 
-  const [isFocusCategory, setIsFocusCategory] = useState(false);
-  const [isFocusCountry, setIsFocusCountry] = useState(false);
-
+const ChooseCategory = (props) => {
   const CategoryType = [
     { label: "Whisky", value: "whisky" },
     { label: "Wine", value: "wine" },
@@ -18,10 +17,27 @@ const ChooseCategory = () => {
     { label: "Cellular", value: "cellular" },
     { label: "Cameras", value: "cameras" },
   ];
-  const Country = [
-    { label: "Israel", value: "isr" },
-    { label: "United States", value: "us" },
-  ];
+  const Country = [{ label: "Any", value: "any" }];
+
+  const [currentCategoryVal, setCurrentCategoryVal] = useState(
+    CategoryType[0].value
+  );
+  const [currentCountryVal, setCurrentCountryVal] = useState(Country[0].val);
+
+  const [isFocusCategory, setIsFocusCategory] = useState(false);
+  const [isFocusCountry, setIsFocusCountry] = useState(false);
+
+  const searchInfluencers = () => {
+    // Get  Influencers in subCategory
+    let influencers = new InfluencerService(`/GetInfluByCategory/`);
+    influencers
+      .get(currentCategoryVal)
+      .then((res) => {
+        console.log(res);
+        props.setResultData(res);
+      })
+      .catch((err) => new ErrorHandler(err).log());
+  };
 
   return (
     <View style={styles.container}>
@@ -30,7 +46,10 @@ const ChooseCategory = () => {
           Choose Category
         </Text>
         <Dropdown
-          style={[styles.dropdown, isFocusCategory && { borderColor: "blue" }]}
+          style={[
+            styles.dropdown,
+            isFocusCategory && { borderColor: root.twitter },
+          ]}
           inputSearchStyle={styles.inputSearchStyle}
           data={CategoryType}
           maxHeight={300}
@@ -66,7 +85,11 @@ const ChooseCategory = () => {
         />
       </View>
       <View style={styles.btnContainer}>
-        <TouchableOpacity activeOpacity={0.5} style={[styles.searchBtn]}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={[styles.searchBtn]}
+          onPress={() => searchInfluencers()}
+        >
           <Text style={styles.btnsText}>Search</Text>
         </TouchableOpacity>
       </View>
@@ -105,7 +128,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   searchBtn: {
-    backgroundColor: "blue",
+    backgroundColor: root.twitter,
     borderRadius: 20,
     width: "80%",
     height: 30,
@@ -117,5 +140,8 @@ const styles = StyleSheet.create({
   btnsText: {
     color: "white",
     fontSize: 17,
+  },
+  inputSearchStyle: {
+    backgroundColor: "white",
   },
 });

@@ -5,23 +5,28 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "react-native-elements";
 import ChooseCategory from "./ChooseCategory";
-import { tweets } from "../../mockData/tweets";
 
 // styles
+import root from "../../styles/root";
 import global from "../../styles/global";
-import Tweet from "../Tweet";
 
 import InfluencerCard from "../Influencer/InfluencerCard";
 const renderItem = ({ item }) => (
   <View style={{ marginRight: 10, marginLeft: 10 }}>
+    {console.log(item)}
     <InfluencerCard influencer={item} />
   </View>
 );
 
 const Search = ({ navigation }) => {
+  const [resultData, setResultData] = useState([]);
+
+  useEffect(() => {
+    console.log(resultData);
+  }, [resultData]);
   return (
     <View style={styles.wrapper}>
       <View style={styles.backBtnContainer}>
@@ -34,12 +39,12 @@ const Search = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.searchContainer}>
-        <ChooseCategory />
+      <View style={[styles.searchContainer, global.shadowDark]}>
+        <ChooseCategory setResultData={setResultData} />
       </View>
       <View style={styles.resultContainer}>
         <FlatList
-          data={tweets}
+          data={resultData}
           keyExtractor={(item) => item.Tid}
           renderItem={renderItem}
         ></FlatList>
@@ -61,11 +66,16 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "flex-end",
     alignItems: "flex-start",
+    backgroundColor: root.twitter,
   },
   searchContainer: {
     flex: 3,
+    backgroundColor: root.light,
+    paddingBottom: 15,
   },
+
   resultContainer: {
     flex: 8,
+    paddingTop: 15,
   },
 });
