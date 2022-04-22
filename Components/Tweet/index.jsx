@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import React from "react";
+import React, { memo } from "react";
 // global styles
 import global from "../../styles/global";
 import root from "../../styles/root";
@@ -68,17 +68,30 @@ const Tweet = (props) => {
   const createdAtStr = dateFormat(formatToJSDate(tweet.CreatedAt));
 
   const imgUrl = {
-    uri: `https://img.buzzfeed.com/buzzfeed-static/static/2017-03/31/13/enhanced/buzzfeed-prod-fastlane-02/original-grid-image-14740-1490981786-4.jpg?crop=590:590;5,0`,
+    uri: !!tweet.Influ.ImgUrl
+      ? tweet.Influ.ImgUrl
+      : `https://img.buzzfeed.com/buzzfeed-static/static/2017-03/31/13/enhanced/buzzfeed-prod-fastlane-02/original-grid-image-14740-1490981786-4.jpg?crop=590:590;5,0`,
   };
   const mediaUrl = {
-    uri: tweet.Media,
+    uri: tweet.MediaUrl,
   };
   return (
     <View style={global.shadowDark}>
       <View style={styles.wrapper}>
+        <View style={styles.categoryContainer}></View>
         <View style={styles.leftContainer}>
           <View style={styles.imgContainer}>
             <Image style={[styles.img, global.shadowDark]} source={imgUrl} />
+          </View>
+          <View style={styles.categorySubContainer}>
+            <Text
+              style={[
+                styles.category,
+                { letterSpacing: 5, color: root.category[tweet.SubCategory] },
+              ]}
+            >
+              {tweet.SubCategory}
+            </Text>
           </View>
         </View>
         <View style={styles.rightContainer}>
@@ -147,10 +160,11 @@ const Tweet = (props) => {
   );
 };
 
-export default Tweet;
+export default memo(Tweet);
 
 const styles = StyleSheet.create({
   wrapper: {
+    position: "relative",
     padding: "0.5%",
     display: "flex",
     backgroundColor: root.bg,
@@ -163,6 +177,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
+  },
+
+  categoryContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    height: "100%",
+    width: "500%",
+    zIndex: 1,
+    backgroundColor: "transparent",
+    flex: 1,
+  },
+
+  categorySubContainer: {
+    position: "relative",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    width: "500%",
+    height: "100%",
+  },
+
+  category: {
+    position: "relative",
+    transform: [{ rotate: "-90deg" }],
+    color: "black",
+    fontFamily: "HiraginoSans-W3",
+    fontSize: 12,
   },
 
   rightContainer: {
@@ -193,6 +235,7 @@ const styles = StyleSheet.create({
   },
 
   leftContainer: {
+    position: "relative",
     width: "15%",
     display: "flex",
     alignItems: "center",

@@ -27,12 +27,6 @@ const InfluencerCard = ({ navigation, influencer }) => {
       onPress={() => goToInfluencerPage()}
     >
       <View style={styles.wrapper}>
-        {/* <View style={styles.categoryContainer}>
-          <Text>
-            {influencer.Categories[0]}
-            {console.log(influencer.Categories)}
-          </Text>
-        </View> */}
         <View style={styles.leftContainer}>
           <View style={styles.imgContainer}>
             <Image
