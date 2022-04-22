@@ -30,6 +30,8 @@ const renderItem = ({ item }) => (
 
 const Home = ({ navigation }) => {
   const [tweets, setTweets] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     // Get Tweets of Influencers that a user follows
     let tweetsForUser = new TweetsService(`/TweetsForUser/1`);
@@ -71,12 +73,23 @@ const Home = ({ navigation }) => {
         </View>
         <View style={styles.tweetsWrapper}>
           <View style={styles.tweetsContainer}>
-            {tweets.length > 0 && (
-              <FlatList
-                data={tweets}
-                keyExtractor={(item) => item.Tid}
-                renderItem={renderItem}
-              ></FlatList>
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <Icon
+                  name="spinner"
+                  type="evilicon"
+                  color={root.secondary}
+                  iconStyle={{ fontWeight: "1600", fontSize: 40 }}
+                />
+              </View>
+            ) : (
+              tweets.length > 0 && (
+                <FlatList
+                  data={tweets}
+                  keyExtractor={(item, index) => item.Tid}
+                  renderItem={renderItem}
+                />
+              )
             )}
           </View>
         </View>
