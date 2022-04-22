@@ -11,8 +11,8 @@ export class InfluencerService extends DataService {
     return super.getAll(this.url);
   }
 
-  get(subCategoryName) {
-    return super.get(this.url, subCategoryName);
+  get(param) {
+    return super.get(this.url, param);
   }
 
   post(data) {
