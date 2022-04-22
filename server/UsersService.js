@@ -1,9 +1,10 @@
 import { DataService } from "./DataService";
+import { apiUrl } from "./api-url";
 
 export class UsersService extends DataService {
-    constructor() {
+    constructor(suffix = '/') {
         super();
-        this.url = 'http://localhost:3000/api/Users';
+        this.url = apiUrl.users + suffix;
     }
 
     getAll() {

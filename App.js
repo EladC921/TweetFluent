@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from './Components/Login';
 import Tabs from './Components/Tabs';
 import Search from './Components/Search';
+import InfluencerProfile from './Components/Influencer/InfluencerProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,14 @@ export default function App() {
         <Stack.Screen
           name="Search"
           component={Search}
+          options={{
+            headerShown: false,
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="InfluencerProfile"
+          component={InfluencerProfile}
           options={{
             headerShown: false,
             gestureEnabled: false,

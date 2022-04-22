@@ -1,9 +1,10 @@
 import { DataService } from "./DataService";
+import { apiUrl } from "./api-url";
 
 export class TweetsService extends DataService {
-    constructor() {
+    constructor(suffix = '/') {
         super();
-        this.url = 'http://localhost:3000/api/Tweets';
+        this.url = apiUrl.tweets + suffix;
     }
 
     getAll() {
