@@ -6,5 +6,15 @@
   "buttonLight": "#ffffff",
   "buttonDark": "#243447",
   "twitter": "#1DA1F2",
-  "bg": "#f5f8fa"
+  "bg": "#f5f8fa",
+  "category": {
+    "camera": "#F94144",
+    "cellular": "#F3722C",
+    "cocktail": "#90BE6D",
+    "computer": "#F8961E",
+    "makeup": "#277DA1",
+    "other": "#F9C74F",
+    "whisky": "#43AA8B",
+    "wine": "#4D908E"
+  }
 }
