@@ -26,6 +26,7 @@
     "react-native-dynamic-search-bar": "^2.0.2",
     "react-native-element-dropdown": "^1.8.8",
     "react-native-elements": "^3.4.2",
+    "react-native-gesture-handler": "^2.4.1",
     "react-native-gifted-charts": "^1.2.1",
     "react-native-pie": "^1.1.2",
     "react-native-pie-chart": "^2.0.2",

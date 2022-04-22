@@ -7,6 +7,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState } from "react";
+
 import root from "../../styles/root.json";
 import logo from "../../assets/logo.png";
 
@@ -43,61 +44,23 @@ const Login = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]}>
+        <TouchableOpacity style={[styles.buttonContainer]} onPress={() => {
+          navigation.navigate("Main");
+        }}>
           <Text
             style={styles.loginText}
-            onPress={() => {
-              navigation.navigate("Main");
-            }}
           >
             Login
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]}>
+        <TouchableOpacity style={[styles.buttonContainer]}>
           <Register />
         </TouchableOpacity>
         <TouchableOpacity style={styles.restoreButtonContainer}>
           <Text>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.inputs}
-          placeholder="Email"
-          keyboardType="email-address"
-          underlineColorAndroid="transparent"
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.inputs}
-          placeholder="Password"
-          secureTextEntry={true}
-          underlineColorAndroid="transparent"
-        />
-      </View>
-
-      <TouchableOpacity style={styles.restoreButtonContainer}>
-        <Text>Forgot Password?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]}>
-        <Text
-          style={styles.loginText}
-          onPress={() => {
-            navigation.navigate("Main");
-          }}
-        >
-          Login
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={[styles.buttonContainer, styles.loginButton]}>
-        <Text style={styles.loginText}>Register</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -109,7 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-
     backgroundColor: root.bg,
   },
   inputContainer: {
@@ -137,7 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: root.bg,
   },
   body: {
-    backgroundColor: root.tertiary,
+    backgroundColor: root.secondary,
     flex: 4,
     width: "100%",
     borderTopRightRadius: 20,
@@ -161,37 +123,16 @@ const styles = StyleSheet.create({
     height: "50%",
   },
   buttonContainer: {
+
+    backgroundColor: root.twitter,
     marginTop: 15,
     height: "10%",
-    flexDirection: "row",
+
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 20,
     width: "50%",
     borderRadius: 30,
-  },
-
-  loginButton: {
-    backgroundColor: root.twitter,
-  },
-
-  loginText: {
-    color: "white",
-  },
-  restoreButtonContainer: {
-    width: 250,
-    marginBottom: 15,
-    alignItems: "center",
-  },
-  socialButtonContent: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  socialIcon: {
-    color: "#FFFFFF",
-    marginRight: 5,
-    backgroundColor: "#B0E0E6",
   },
   inputContainer: {
     borderBottomColor: "#F5FCFF",
@@ -210,47 +151,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#FFFFFF",
     flex: 1,
   },
-  icon: {
-    width: 30,
-    height: 30,
-  },
-  inputIcon: {
-    marginLeft: 15,
-    justifyContent: "center",
-  },
-  buttonContainer: {
-    height: 45,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-    width: 170,
-    borderRadius: 30,
-  },
-  loginButton: {
-    backgroundColor: "#3498db",
-  },
-  fabookButton: {
-    backgroundColor: "#3b5998",
-  },
-  googleButton: {
-    backgroundColor: "#ff0000",
-  },
   loginText: {
     color: "white",
-  },
-  restoreButtonContainer: {
-    width: 250,
-    marginBottom: 15,
-    alignItems: "center",
-  },
-  socialButtonContent: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  socialIcon: {
-    color: "#FFFFFF",
-    marginRight: 5,
   },
 });
