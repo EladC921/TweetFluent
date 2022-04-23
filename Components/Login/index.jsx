@@ -44,14 +44,13 @@ const Login = ({ navigation }) => {
           />
         </View>
 
-        <TouchableOpacity style={[styles.buttonContainer]} onPress={() => {
-          navigation.navigate("Main");
-        }}>
-          <Text
-            style={styles.loginText}
-          >
-            Login
-          </Text>
+        <TouchableOpacity
+          style={[styles.buttonContainer]}
+          onPress={() => {
+            navigation.navigate("Main");
+          }}
+        >
+          <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.buttonContainer]}>
@@ -99,7 +98,6 @@ const styles = StyleSheet.create({
     backgroundColor: root.bg,
   },
   body: {
-    backgroundColor: root.secondary,
     flex: 4,
     width: "100%",
     borderTopRightRadius: 20,
@@ -123,7 +121,6 @@ const styles = StyleSheet.create({
     height: "50%",
   },
   buttonContainer: {
-
     backgroundColor: root.twitter,
     marginTop: 15,
     height: "10%",

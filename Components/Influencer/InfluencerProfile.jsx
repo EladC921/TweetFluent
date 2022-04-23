@@ -5,8 +5,9 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Linking,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChartData from "./PieChartData";
@@ -14,28 +15,47 @@ import Tweet from "../Tweet";
 import { tweets } from "../../mockData/tweets";
 import { useNavigation } from "@react-navigation/native";
 
-const InfluencerProfile = (props) => {
-  const navigation = useNavigation();
+// Serverside
+import { TweetsService } from "../../server/TweetsService";
+import { ErrorHandler } from "../../server/ErrorHandler";
 
-  const [isData, setIsData] = useState(true);
-  const tweetsData = [];
-  const renderPieData = () => {
-    return (
-      <PieChartData
-        categories={[
-          { name: "wine", percentage: 33.2 },
-          { name: "camera", percentage: 33.2 },
-          { name: "makeup", percentage: 33.6 },
-        ]}
-      />
+// global styles
+import global from "../../styles/global";
+import root from "../../styles/root";
+
+const InfluencerProfile = ({ route }) => {
+  const navigation = useNavigation();
+  const [influencerData, setInfluencerData] = useState(route.params.res);
+  const [tweets, setTweets] = useState([]);
+  const [categories, setCategories] = useState(
+    influencerData.Categories.map((c) => {
+      return { name: c.SubCategoryName, percentage: c.Percentage };
+    })
+  );
+  const [isCategories, setIsCategories] = useState(true);
+
+  useEffect(() => {
+    // Get Tweets of Influencer
+    let tweetsForUser = new TweetsService(
+      `/GetInfluencerTweets/${influencerData.Id}`
     );
+    tweetsForUser
+      .getAll()
+      .then((res) => {
+        setTweets((prev) => res);
+      })
+      .catch((err) => new ErrorHandler(err).log());
+  }, []);
+
+  const renderPieData = () => {
+    return <PieChartData categories={categories} />;
   };
   const renderTweetsData = () => {
     return (
       <View>
-        <TouchableOpacity activeOpacity={0.5} style={styles.goBackBtn}>
+        {/* <TouchableOpacity activeOpacity={0.5} style={styles.goBackBtn}>
           <Text>filter</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <FlatList
           data={tweets}
           renderItem={renderTweets}
@@ -46,13 +66,17 @@ const InfluencerProfile = (props) => {
   };
 
   const renderTweets = ({ item }) => {
-    return <Tweet tweet={item} />;
+    return <Tweet key={item.TweetId} tweet={item} />;
   };
 
+  const goToTwitter = () => {
+    console.log(influencerData.ProfileUrl);
+    Linking.canOpenURL(influencerData.ProfileUrl);
+  };
 
   return (
     <View style={styles.influencerContainer}>
-      <View style={styles.headerContainer}>
+      <View style={[styles.headerContainer, global.shadowDark]}>
         <View style={styles.headerNav}>
           <TouchableOpacity
             activeOpacity={0.5}
@@ -73,34 +97,41 @@ const InfluencerProfile = (props) => {
         </View>
         <View style={styles.hederSec1}>
           <View style={styles.hederSec1Child}>
-            <Text style={styles.numOfFollow}>2300</Text>
+            <Text style={styles.numOfFollow}>
+              {influencerData.FollowersCount}
+            </Text>
             <Text style={styles.follow}>Followers</Text>
           </View>
           <View style={styles.hederSec1Child}>
             <Image
-              style={styles.profileImg}
+              style={[styles.profileImg, global.shadowDark]}
               source={{
-                uri: "https://img.freepik.com/free-photo/pleasant-looking-serious-man-stands-profile-has-confident-expression-wears-casual-white-t-shirt_273609-16959.jpg?size=626&ext=jpg&ga=GA1.2.1420692388.1641168000",
+                uri: influencerData.ImgUrl,
               }}
             />
           </View>
           <View style={styles.hederSec1Child}>
-            <Text style={styles.numOfFollow}>2300</Text>
+            <Text style={styles.numOfFollow}>
+              {influencerData.FollowingCount}
+            </Text>
             <Text style={styles.follow}>Following</Text>
           </View>
         </View>
+
         <View style={styles.hederSec2}>
           <Text style={[styles.hederSec2Child, styles.influencerName]}>
-            Name
+            {influencerData.Name}
           </Text>
           <Text style={[styles.hederSec2Child, styles.influencerBio]}>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Impedit
-            modi placeat, fugiat, obcaecati iusto a fugit maiores, ipsa quas
-            odit sed quae cumque velit atque! Obcaecati non nesciunt culpa iure!
+            {influencerData.Bio}
           </Text>
         </View>
         <View style={styles.hederSec3}>
-          <TouchableOpacity activeOpacity={0.5} style={[styles.hederSec3Child]}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={[styles.hederSec3Child]}
+            onPress={() => goToTwitter()}
+          >
             <Text style={styles.btnsText}>Twitter</Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5} style={styles.hederSec3Child}>
@@ -113,20 +144,20 @@ const InfluencerProfile = (props) => {
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.showPieBtn}
-            onPress={() => setIsData(true)}
+            onPress={() => setIsCategories(true)}
           >
-            <Text style={styles.contentBtn}>Data</Text>
+            <Text style={styles.contentBtn}>Categories</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.5}
             style={styles.showTweetsBtn}
-            onPress={() => setIsData(false)}
+            onPress={() => setIsCategories(false)}
           >
             <Text style={styles.contentBtn}>Tweets</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.content}>
-          {isData ? renderPieData() : renderTweetsData()}
+          {isCategories ? renderPieData() : renderTweetsData()}
         </View>
       </View>
     </View>
@@ -139,7 +170,6 @@ const styles = StyleSheet.create({
   influencerContainer: {
     height: "100%",
     display: "flex",
-    backgroundColor: "#1D9BF0",
   },
   headerContainer: {
     flex: 1,
@@ -147,9 +177,10 @@ const styles = StyleSheet.create({
     paddingTop: "10%",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: root.twitter,
   },
   contentContainer: {
-    flex: 1.3,
+    flex: 1.5,
     display: "flex",
     flexDirection: "column",
     backgroundColor: "white",
@@ -159,20 +190,27 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    backgroundColor: "#EFF3F4",
+    backgroundColor: root.twitter,
   },
   content: {
     flex: 11,
   },
   showPieBtn: {
     flex: 1,
-    borderColor: "gray",
+    borderColor: "white",
     borderWidth: 1,
+    borderTopColor: "transparent",
   },
-  showTweetsBtn: { flex: 1, borderColor: "gray", borderWidth: 1 },
+  showTweetsBtn: {
+    flex: 1,
+    borderColor: "white",
+    borderWidth: 1,
+    borderTopColor: "transparent",
+  },
   contentBtn: {
     fontSize: 17,
     textAlign: "center",
+    color: "white",
   },
   headerNav: {
     flex: 1,
@@ -201,12 +239,12 @@ const styles = StyleSheet.create({
   numOfFollow: {
     textAlign: "center",
     fontSize: 20,
-    color: "white",
+    color: root.light,
   },
   follow: {
     textAlign: "center",
     fontSize: 17,
-    color: "white",
+    color: root.light,
   },
   profileImg: {
     // resizeMode: "contain",
@@ -224,30 +262,35 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   influencerName: {
-    color: "white",
     fontSize: 20,
+    color: "white",
   },
   influencerBio: {
-    color: "white",
     fontSize: 16,
+    color: root.light,
+    padding: 10,
   },
 
   hederSec3: {
     flex: 1.5,
     display: "flex",
     flexDirection: "row",
-    width: "70%",
+    width: "100%",
   },
   hederSec3Child: {
     textAlign: "center",
-
+    backgroundColor: "white",
+    borderRadius: 50,
     flex: 1,
+    marginVertical: 10,
+    marginHorizontal: 30,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   btnsText: {
-    color: "white",
-    borderColor: "white",
-    borderWidth: 1,
-    fontSize: 16,
+    color: root.buttonDark,
+    fontSize: 15,
     textAlign: "center",
     margin: 3,
   },

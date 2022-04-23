@@ -6,20 +6,16 @@ import root from "../../styles/root";
 // icon
 import { Icon } from "react-native-elements";
 // Serverside
-import { TweetsService } from "../../server/TweetsService";
+import { InfluencerService } from "../../server/InfluencerService";
 import { ErrorHandler } from "../../server/ErrorHandler";
 
 const InfluencerCard = ({ navigation, influencer }) => {
   const goToInfluencerPage = () => {
-    let t = new TweetsService(`/GetInfluencerTweets/${influencer.Id}`);
-
+    let t = new InfluencerService(`/GetInfluencer`);
     // Navigate to Influencer Page with his tweets and details
-    t.getAll()
+    t.get(influencer.Id)
       .then((res) => {
-        navigation.navigate("InfluencerProfile", {
-          iid: influencer.Id,
-          params: { tweet: res, influ: influencer },
-        });
+        navigation.navigate("InfluencerProfile", { res });
       })
       .catch((err) => new ErrorHandler(err).log());
   };
