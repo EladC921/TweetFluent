@@ -86,7 +86,7 @@ const Home = ({ navigation }) => {
               tweets.length > 0 && (
                 <FlatList
                   data={tweets}
-                  keyExtractor={(item, index) => item.Tid}
+                  keyExtractor={(item) => item.TweetId}
                   renderItem={renderItem}
                 />
               )

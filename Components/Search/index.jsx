@@ -59,7 +59,7 @@ const Search = ({ navigation }) => {
             )}
             <FlatList
               data={resultData}
-              keyExtractor={(item) => item.Tid}
+              keyExtractor={(item) => item.Id}
               renderItem={renderItem}
             ></FlatList>
           </>
