@@ -3,8 +3,6 @@ import React, { useEffect } from "react";
 // global styles
 import global from "../../styles/global";
 import root from "../../styles/root";
-// icon
-import { Icon } from "react-native-elements";
 // Serverside
 import { InfluencerService } from "../../server/InfluencerService";
 import { ErrorHandler } from "../../server/ErrorHandler";
