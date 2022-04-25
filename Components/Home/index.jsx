@@ -22,11 +22,7 @@ import { TweetsService } from "../../server/TweetsService";
 import { ErrorHandler } from "../../server/ErrorHandler";
 
 // Redner Tweets
-const renderItem = ({ item }) => (
-  <View style={{}}>
-    <Tweet tweet={item} />
-  </View>
-);
+const renderItem = ({ item }) => <Tweet key={item.TweetId} tweet={item} />;
 
 const Home = ({ navigation }) => {
   const [tweets, setTweets] = useState([]);
