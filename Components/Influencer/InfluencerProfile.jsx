@@ -9,10 +9,8 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Icon } from "react-native-elements";
-import { SafeAreaView } from "react-native-safe-area-context";
 import PieChartData from "./PieChartData";
 import Tweet from "../Tweet";
-import { tweets } from "../../mockData/tweets";
 import { useNavigation } from "@react-navigation/native";
 
 // Serverside
@@ -59,7 +57,7 @@ const InfluencerProfile = ({ route }) => {
         <FlatList
           data={tweets}
           renderItem={renderTweets}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.TweetId}
         />
       </View>
     );
@@ -70,7 +68,6 @@ const InfluencerProfile = ({ route }) => {
   };
 
   const goToTwitter = () => {
-    console.log(influencerData.ProfileUrl);
     Linking.canOpenURL(influencerData.ProfileUrl);
   };
 
@@ -143,17 +140,25 @@ const InfluencerProfile = ({ route }) => {
         <View style={styles.contentNav}>
           <TouchableOpacity
             activeOpacity={0.5}
-            style={styles.showPieBtn}
             onPress={() => setIsCategories(true)}
+            style={isCategories ? styles.nonActiveStyle : styles.activeStlye}
           >
-            <Text style={styles.contentBtn}>Categories</Text>
+            <Text
+              style={isCategories ? styles.contentBtn : styles.activeContentBtn}
+            >
+              Categories
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.5}
-            style={styles.showTweetsBtn}
             onPress={() => setIsCategories(false)}
+            style={isCategories ? styles.activeStlye : styles.nonActiveStyle}
           >
-            <Text style={styles.contentBtn}>Tweets</Text>
+            <Text
+              style={isCategories ? styles.activeContentBtn : styles.contentBtn}
+            >
+              Tweets
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.content}>
@@ -190,27 +195,32 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    backgroundColor: root.twitter,
   },
   content: {
     flex: 11,
   },
-  showPieBtn: {
+  nonActiveStyle: {
     flex: 1,
-    borderColor: "white",
-    borderWidth: 1,
     borderTopColor: "transparent",
+    backgroundColor: root.twitter,
   },
-  showTweetsBtn: {
+  activeStlye: {
     flex: 1,
-    borderColor: "white",
-    borderWidth: 1,
-    borderTopColor: "transparent",
+    borderColor: root.twitter,
+    borderBottomWidth: 2,
+    backgroundColor: "white",
   },
   contentBtn: {
+    padding: 5,
     fontSize: 17,
     textAlign: "center",
     color: "white",
+  },
+  activeContentBtn: {
+    padding: 5,
+    fontSize: 17,
+    textAlign: "center",
+    color: root.twitter,
   },
   headerNav: {
     flex: 1,
@@ -240,10 +250,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     color: root.light,
+    fontFamily: "Helvetica-Oblique",
   },
   follow: {
     textAlign: "center",
     fontSize: 17,
+    fontFamily: "Helvetica-LightOblique",
     color: root.light,
   },
   profileImg: {
@@ -264,11 +276,15 @@ const styles = StyleSheet.create({
   influencerName: {
     fontSize: 20,
     color: "white",
+    fontFamily: "Helvetica-BoldOblique",
+    fontWeight: "700",
   },
   influencerBio: {
-    fontSize: 16,
+    fontSize: 14,
     color: root.light,
     padding: 10,
+    fontWeight: "500",
+    fontFamily: "Helvetica Neue",
   },
 
   hederSec3: {
