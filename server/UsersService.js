@@ -11,8 +11,13 @@ export class UsersService extends DataService {
         return super.getAll(this.url);
     }
 
-    get(id) {
-        return super.get(this.url, id);
+    /**
+     * @@@ ~/api/users/{email}
+     * @param {*} email
+     * @returns User
+     */
+    get(email) {
+        return super.get(this.url, email);
     }
 
     post(data) {
