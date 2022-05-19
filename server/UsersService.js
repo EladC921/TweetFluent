@@ -12,7 +12,7 @@ export class UsersService extends DataService {
     }
 
     /**
-     * @@@ ~/api/users/{email}
+     * @@@ HTTP GET /api/users/{email}
      * @param {*} email
      * @returns User
      */
@@ -20,6 +20,11 @@ export class UsersService extends DataService {
         return super.get(this.url, email);
     }
 
+    /**
+     * @@@ HTTP POST /api/users
+     * @param {*} data User data
+     * @returns Created user
+     */
     post(data) {
         return super.post(this.url, data);
     }
