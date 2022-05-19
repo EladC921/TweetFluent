@@ -1,5 +1,5 @@
 export class DataService {
-  constructor() {}
+  constructor() { }
 
   getAll(url) {
     return fetch(url, {

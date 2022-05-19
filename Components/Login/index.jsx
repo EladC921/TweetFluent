@@ -6,16 +6,61 @@ import {
   TextInput,
   Image,
 } from "react-native";
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+// styles
 import root from "../../styles/root.json";
 import logo from "../../assets/logo.png";
-
+//components
 import Register from "./Register";
+// firebase
+import { auth } from "../../server/firebase";
+// server & data
+import { UsersService, ErrorHandler } from "../../server/UsersService";
+import { CurrentUser } from "../../data/CurrentUser";
 
 const Login = ({ navigation }) => {
-  const [uname, setUname] = useState(null);
-  const [pass, setPass] = useState(null);
+  const [uname, setUname] = useState('');
+  const [pass, setPass] = useState('');
+  const [authFinished, setAuthFinished] = useState(false);
+  let userAuthEmail = "";
+
+  // TODO:Elad - check if login works && build User serveside
+  const handleLogin = () => {
+    auth.signInWithEmailAndPassword(uname, pass)
+      .then(userCredentials => {
+        const user = userCredentials.user;
+        console.log('Logged in with: ', user.email);
+        userAuthEmail = user.email;
+        setAuthFinished(true);
+      })
+      .catch(error => alert(error.message));
+  }
+
+  // if user is already logged in
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        console.log('Logged in with: ', user.email);
+        userAuthEmail = user.email;
+        setAuthFinished(true);
+      }
+
+      return unsubscribe;
+    });
+  }, []);
+
+  // get User details and navigate to app
+  useEffect(() => {
+    if (authFinished) {
+      us = new UsersService();
+      us.get(userAuthEmail).then(res => {
+        new CurrentUser(res.Uid, res.Email, res.FirstName, res.LastName, res.DisplayName); // TODO:Elad - check the namings of the variables in the server
+        navigation.navigate("Main");
+      })
+        .catch(err => new ErrorHandler(err).log());
+    }
+  }, [authFinished]);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -28,31 +73,28 @@ const Login = ({ navigation }) => {
           <TextInput
             style={styles.inputs}
             placeholder={"Email"}
+            placeholderTextColor={root.tertiary}
             keyboardType="email-address"
             onChangeText={(username) => setUname(username)}
             underlineColorAndroid="transparent"
           />
         </View>
-
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.inputs}
             placeholder="Password"
+            placeholderTextColor={root.tertiary}
             secureTextEntry={true}
             onChangeText={(pword) => setPass(pword)}
             underlineColorAndroid="transparent"
           />
         </View>
-
         <TouchableOpacity
           style={[styles.buttonContainer]}
-          onPress={() => {
-            navigation.navigate("Main");
-          }}
+          onPress={handleLogin}
         >
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
-
         <TouchableOpacity style={[styles.buttonContainer]}>
           <Register />
         </TouchableOpacity>
@@ -73,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: root.bg,
   },
+
   inputContainer: {
     marginTop: 10,
     borderBottomColor: root.light,
