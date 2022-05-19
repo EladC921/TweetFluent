@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, FlatList } from "react-native";
+import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity,TextInput } from "react-native";
 import { tweets } from "../../mockData/tweets";
 import InfluencerCard from "../Influencer/InfluencerCard";
 import root from "../../styles/root";
-
+import { Icon } from "react-native-elements";
 const renderItem = ({ item }) => (
   <View style={{ marginRight: 10, marginLeft: 10 }}>
     <InfluencerCard influencer={item} />
@@ -13,8 +13,18 @@ const renderItem = ({ item }) => (
 const UserProfile = (props) => {
   return (
     <View style={styles.container}>
+      <View style={styles.top}>
+      <Icon
+              name="gear"
+              type="evilicon"
+              color={root.secondary}
+              iconStyle={{ fontWeight: "1600", fontSize: 40 }}
+            />  
+      </View>
       <View style={styles.header}>
+        
         <View style={styles.headerContent}>
+  
           <Image
             style={styles.avatar}
             source={{
@@ -22,14 +32,39 @@ const UserProfile = (props) => {
             }}
           />
 
+          
+        <Icon
+              style={[styles.plus]}
+              name="plus"
+              type="evilicon"
+              color={root.secondary}
+              iconStyle={{ fontWeight: "1600", fontSize: 40 }}
+            /> 
           <Text style={styles.name}>John Doe </Text>
           <Text style={styles.userInfo}>Following: </Text>
           <Text style={styles.userInfo}>influencers you follow: </Text>
           {/** Search Bar */}
+   
         </View>
       </View>
-
+          <View style={styles.mid}>
+          <View style={styles.btnContainer}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={[styles.searchBtn]}
+         /** onPress={() => searchInfluencers()} */
+        >
+          <Text style={styles.btnsText}>Search</Text>
+        </TouchableOpacity>
+      </View>
+      <TextInput
+        style={styles.input}
+        
+      />
+     
+          </View>
       <View style={styles.body}>
+      
         <View style={styles.results}>
           {tweets.length > 0 && (
             <FlatList
@@ -56,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   headerContent: {
-    padding: 30,
+    
     alignItems: "center",
   },
   avatar: {
@@ -65,8 +100,14 @@ const styles = StyleSheet.create({
     borderRadius: 63,
     borderWidth: 4,
     borderColor: "#fff",
-    marginBottom: 10,
+    
   },
+  top:{
+    alignItems:"flex-end",
+    padding:15,
+    
+  },
+
   name: {
     fontSize: 22,
     color: root.main,
@@ -77,15 +118,59 @@ const styles = StyleSheet.create({
     color: root.secondary,
     fontWeight: "600",
   },
+  btnsText:{
+    
+  },
+
+  plus:{
+    marginLeft:100,
+    justifyContent:"center",
+    alignItems:"center",
+    
+    
+  
+  },
+  btnsText:{
+    color:"white"
+  },
+
+  searchBtn: {
+    backgroundColor: root.twitter,
+    borderRadius: 20,
+    width: "100%",
+    height: 30,
+    
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft:30
+  },
   body: {
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
+   
     backgroundColor: root.light,
     flex: 3,
     alignItems: "center",
   },
+  mid: {
+    paddingTop:20,
+   width:"100%",
+    flexDirection:"row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop:30,
+    flex:0.5,
+  },
   item: {
     flexDirection: "row",
+  },
+  input: {
+    height: 40,
+    width:"60%",
+    borderColor:root.secondary,
+    borderWidth: 1,
+    padding: 10,
+    marginRight:30,
+    borderRadius: 20,
   },
 
   results: {
@@ -95,7 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
-    width: "90%",
+    width: "100%",
     height: "100%",
   },
 });
