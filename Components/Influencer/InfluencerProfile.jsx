@@ -16,14 +16,17 @@ import { useNavigation } from "@react-navigation/native";
 // Serverside
 import { TweetsService } from "../../server/TweetsService";
 import { ErrorHandler } from "../../server/ErrorHandler";
+import { UsersService } from "../../server/UsersService";
 
 // global styles
 import global from "../../styles/global";
 import root from "../../styles/root";
 
 const InfluencerProfile = ({ route }) => {
+  const uid = route.params.uid;
   const navigation = useNavigation();
-  const [influencerData, setInfluencerData] = useState(route.params.res);
+  const [influencerData, setInfluencerData] = useState(route.params.influencer);
+  const [isSubscribed, setIsSubscribe] = useState(route.params.isSubscribe);
   const [tweets, setTweets] = useState([]);
   const [categories, setCategories] = useState(
     influencerData.Categories.map((c) => {
@@ -46,7 +49,8 @@ const InfluencerProfile = ({ route }) => {
   }, []);
 
   const renderPieData = () => {
-    return <PieChartData categories={categories} />;
+    let id = "id" + Math.random().toString(16).slice(2)
+    return <PieChartData keyExtractor={id} categories={categories} />;
   };
   const renderTweetsData = () => {
     return (
@@ -70,6 +74,20 @@ const InfluencerProfile = ({ route }) => {
   const goToTwitter = () => {
     Linking.canOpenURL(influencerData.ProfileUrl);
   };
+
+  const toggleSubscribe = () => {
+    let prevSub = isSubscribed;
+    setIsSubscribe(!prevSub);
+
+    if (prevSub) {
+      let u = new UsersService('/unsubscribe');
+      u.unsubscribeInfluencer(uid, influencerData.Id).then(res => console.log(res)).catch(err => new ErrorHandler(err).log());
+    }
+    else {
+      let u = new UsersService('/subscribe');
+      u.subscribeInfluencer(uid, influencerData.Id).then(res => console.log(res)).catch(err => new ErrorHandler(err).log());
+    }
+  }
 
   return (
     <View style={styles.influencerContainer}>
@@ -131,8 +149,8 @@ const InfluencerProfile = ({ route }) => {
           >
             <Text style={styles.btnsText}>Twitter</Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5} style={styles.hederSec3Child}>
-            <Text style={styles.btnsText}>Subscribe</Text>
+          <TouchableOpacity activeOpacity={0.5} style={styles.hederSec3Child} onPress={toggleSubscribe}>
+            <Text style={styles.btnsText}>{isSubscribed ? "Unsubscribe" : "Subscribe"}</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -13,13 +13,15 @@ import logo from "../../assets/logo.png";
 import global from "../../styles/global";
 import root from "../../styles/root.json";
 import { Icon } from "react-native-elements";
-// const tweets - mock data
-// import { tweets } from "../../mockData/tweets";
+// navigation
+import { useIsFocused } from "@react-navigation/native";
 // Components
 import Tweet from "../Tweet";
 // Serverside
 import { TweetsService } from "../../server/TweetsService";
 import { ErrorHandler } from "../../server/ErrorHandler";
+import { getCurrentUser } from "../../data/CurrentUser";
+
 
 // Redner Tweets
 const renderItem = ({ item }) => <Tweet key={item.TweetId} tweet={item} />;
@@ -27,17 +29,26 @@ const renderItem = ({ item }) => <Tweet key={item.TweetId} tweet={item} />;
 const Home = ({ navigation }) => {
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({});
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
+    getCurrentUser().then(res => JSON.parse(res))
+      .then(result => setUser(result))
+      .catch(err => new ErrorHandler(err).log());
+
     // Get Tweets of Influencers that a user follows
-    let tweetsForUser = new TweetsService(`/TweetsForUser/1`);
+    let tweetsForUser = new TweetsService(`/TweetsForUser/${user.uid}`);
+    setLoading(true);
     tweetsForUser
       .getAll()
       .then((res) => {
         setTweets(res);
       })
-      .catch((err) => new ErrorHandler(err).log());
-  }, []);
+      .catch((err) => new ErrorHandler(err).log())
+      .finally(() => setLoading(false));
+  }, [isFocused]);
 
   return (
     <View style={styles.wrapper}>
@@ -79,12 +90,14 @@ const Home = ({ navigation }) => {
                 />
               </View>
             ) : (
-              tweets.length > 0 && (
+              tweets.length > 0 ? (
                 <FlatList
                   data={tweets}
                   keyExtractor={(item) => item.TweetId}
                   renderItem={renderItem}
                 />
+              ) : (
+                <Text>You don't subscribe anyone yet!</Text>
               )
             )}
           </View>
