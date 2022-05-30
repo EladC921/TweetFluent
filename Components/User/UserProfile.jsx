@@ -34,7 +34,7 @@ const UserProfile = (props) => {
           {tweets.length > 0 && (
             <FlatList
               data={tweets}
-              keyExtractor={(item) => item.Tid}
+              keyExtractor={(item) => item.TweetId}
               renderItem={renderItem}
             ></FlatList>
           )}
