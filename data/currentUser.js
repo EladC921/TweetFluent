@@ -12,10 +12,19 @@ export const setCurrentUser = async (user) => {
 export const getCurrentUser = async () => {
     try {
         let user = await AsyncStorage.getItem('currentUser');
-        if (user !== null) return user;
+        if (user !== null) return JSON.parse(user);
         else throw 'There is no user in AsyncStorage';
     } catch (err) {
         new ErrorHandler(err).log();
     }
 }
 
+export const removeCurrentUser = async () => {
+    try {
+        await AsyncStorage.removeItem('currentUser');
+    } catch (err) {
+        new ErrorHandler(err).log();
+    }
+}
+
+export var ConstUser = {};

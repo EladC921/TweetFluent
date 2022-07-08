@@ -10,11 +10,10 @@ import { UsersService } from "../../server/UsersService";
 import { getCurrentUser } from "../../data/CurrentUser";
 
 const InfluencerCard = ({ navigation, influencer }) => {
-
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    getCurrentUser().then(res => JSON.parse(res))
+    getCurrentUser()
       .then(result => setUser(result))
       .catch(err => new ErrorHandler(err).log());
   }, []);
@@ -82,8 +81,8 @@ const InfluencerCard = ({ navigation, influencer }) => {
               <Text style={styles.footerTxt}>Following</Text>
             </View>
             <View style={styles.icon}>
-              <Text style={styles.iconTxt}>0</Text>
-              <Text style={styles.footerTxt}>subscribers</Text>
+              <Text style={styles.iconTxt}>{influencer.SubscribersCount}</Text>
+              <Text style={styles.footerTxt}>Subscribers</Text>
             </View>
           </View>
         </View>

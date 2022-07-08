@@ -37,7 +37,6 @@ export class DataService {
         _url += param.name + "=" + param.value;
       });
     }
-    console.log(_url);
 
     return fetch(_url, {
       method: "GET",
