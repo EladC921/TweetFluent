@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     display: "flex",
     backgroundColor: root.bg,
     overflow: "hidden",
-    minHeight: 100,
+    minHeight: 150,
     width: "100%",
     marginBottom: 5,
     marginTop: 5,

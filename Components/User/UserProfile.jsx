@@ -1,40 +1,78 @@
-import React, { Component } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { StyleSheet, Text, View, Image, FlatList } from "react-native";
 import { tweets } from "../../mockData/tweets";
 import InfluencerCard from "../Influencer/InfluencerCard";
 import root from "../../styles/root";
-
-const renderItem = ({ item }) => (
-  <View style={{ marginRight: 10, marginLeft: 10 }}>
-    <InfluencerCard influencer={item} />
-  </View>
-);
+import { InfluencerService } from "../../server/InfluencerService";
+import { getCurrentUser, removeCurrentUser } from "../../data/CurrentUser";
+import { SafeAreaView, TouchableOpacity } from "react-native-gesture-handler";
+import { auth } from "../../server/firebase";
+import { useFocusEffect } from "@react-navigation/native";
 
 const UserProfile = (props) => {
+  const [influencers, setInfluencers] = useState([]);
+  const [user, setUser] = useState({});
+
+  const renderItem = ({ item, index }) => (
+    <View style={{ marginRight: 10, marginLeft: 10 }}>
+      <InfluencerCard influencer={item} navigation={props.navigation} />
+    </View>
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      getCurrentUser()
+        .then(result => {
+          setUser(result);
+          return result;
+        })
+        .then(
+          u => {
+            let i = new InfluencerService(`/SubscribedInfluencersByUser/${u.uid}`);
+            i.getAll().then((res) => {
+              setInfluencers(res);
+            })
+              .catch((err) => new ErrorHandler(err).log());
+          })
+        .catch((err) => new ErrorHandler(err).log());
+
+    }, [])
+  );
+
+  const handleLogout = () => {
+    let removeUser = removeCurrentUser();
+
+    removeUser.then(() => {
+      auth.signOut()
+        .then(() => {
+          props.navigation.navigate("Login");
+        })
+        .catch(err => {
+          alert(err);
+          new ErrorHandler(err).log()
+        });
+    })
+      .catch(err => new ErrorHandler(err).log());
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: "https://bootdey.com/img/Content/avatar/avatar6.png",
-            }}
-          />
-
-          <Text style={styles.name}>John Doe </Text>
-          <Text style={styles.userInfo}>Following: </Text>
-          <Text style={styles.userInfo}>influencers you follow: </Text>
+          <Text style={styles.name}>{`Hello, ${user.firstName} ${user.lastName}`} </Text>
+          <Text style={styles.userInfo}>You subscribe: {influencers.length} Influencers</Text>
           {/** Search Bar */}
         </View>
       </View>
-
+      <View style={styles.settingsContainer}>
+        <TouchableOpacity style={styles.settingsBtn} onPress={handleLogout}><Text style={styles.settingsTxt}>Logout</Text></TouchableOpacity>
+      </View>
       <View style={styles.body}>
         <View style={styles.results}>
           {tweets.length > 0 && (
             <FlatList
-              data={tweets}
-              keyExtractor={(item) => item.TweetId}
+              data={influencers}
+              keyExtractor={(item) => item.Id}
               renderItem={renderItem}
             ></FlatList>
           )}
@@ -48,6 +86,7 @@ export default UserProfile;
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: "10%",
     backgroundColor: root.bg,
     flex: 1,
   },
@@ -58,14 +97,9 @@ const styles = StyleSheet.create({
   headerContent: {
     padding: 30,
     alignItems: "center",
-  },
-  avatar: {
-    width: 130,
-    height: 130,
-    borderRadius: 63,
-    borderWidth: 4,
-    borderColor: "#fff",
-    marginBottom: 10,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   name: {
     fontSize: 22,
@@ -76,12 +110,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: root.secondary,
     fontWeight: "600",
+    paddingTop: 10,
   },
   body: {
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     backgroundColor: root.light,
-    flex: 3,
+    flex: 5,
     alignItems: "center",
   },
   item: {
@@ -98,4 +133,27 @@ const styles = StyleSheet.create({
     width: "90%",
     height: "100%",
   },
+  settingsContainer: {
+    position: "absolute",
+    top: "5%",
+    right: 5,
+  },
+  settingsBtn: {
+    backgroundColor: root.bgp,
+    borderWidth: 2,
+    borderColor: "#f40000",
+    borderRadius: 10,
+    margin: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  settingsTxt: {
+    color: "#f40000",
+    fontSize: 14,
+    fontWeight: "600",
+  }
 });

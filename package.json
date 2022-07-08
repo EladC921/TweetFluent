@@ -30,11 +30,13 @@
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^2.4.1",
     "react-native-gifted-charts": "^1.2.1",
+    "react-native-multiple-select": "^0.5.9",
     "react-native-pie": "^1.1.2",
     "react-native-pie-chart": "^2.0.2",
     "react-native-progress": "^5.0.0",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
+    "react-native-select-multiple": "^2.1.0",
     "react-native-svg": "12.1.1",
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1"

@@ -16,7 +16,7 @@ import Register from "./Register";
 import { auth } from "../../server/firebase";
 // server & data
 import { UsersService } from "../../server/UsersService";
-import { setCurrentUser } from "../../data/CurrentUser";
+import { getCurrentUser, setCurrentUser, ConstUser } from "../../data/CurrentUser";
 import { ErrorHandler } from "../../server/ErrorHandler";
 
 const Login = ({ navigation }) => {
@@ -57,7 +57,9 @@ const Login = ({ navigation }) => {
       email: user.Email,
       country: user.Country
     };
-    setCurrentUser(_user).then(() => setAuthFinished(false));
+    setCurrentUser(_user)
+      .then(() => setAuthFinished(false))
+      .catch(err => new ErrorHandler(err).log());
   }
 
   // get User details and navigate to app
@@ -65,7 +67,6 @@ const Login = ({ navigation }) => {
     if (authFinished) {
       let us = new UsersService("/login");
       us.get(userAuthEmail).then(res => {
-        console.log(res);
         setLoggedInUser(res);
       })
         .then(() => {

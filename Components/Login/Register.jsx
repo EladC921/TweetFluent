@@ -58,7 +58,6 @@ const Register = () => {
     auth.createUserWithEmailAndPassword(signmail, signpass)
       .then(userCredentials => {
         const user = userCredentials.user;
-        console.log(user.email);
         validateSignUp();
       })
       .then(() => {
@@ -79,7 +78,6 @@ const Register = () => {
     }
     us.post(user)
       .then(res => {
-        console.log(res);
         alert("User created successfully");
       })
       .catch(err => new ErrorHandler(err).log());
