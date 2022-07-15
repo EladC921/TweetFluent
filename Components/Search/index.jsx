@@ -16,7 +16,6 @@ import global from "../../styles/global";
 import InfluencerCard from "../Influencer/InfluencerCard";
 const renderItem = ({ item }) => (
   <View style={{ marginRight: 10, marginLeft: 10 }}>
-    {console.log(item)}
     <InfluencerCard influencer={item} />
   </View>
 );
@@ -29,25 +28,19 @@ const Search = ({ navigation }) => {
   }, [resultData]);
   return (
     <View style={styles.wrapper}>
-      <View style={styles.backBtnContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon
-            name="chevron-back-outline"
-            type="ionicon"
-            color="black"
-            iconStyle={{ fontWeight: "1600" }}
-          />
-        </TouchableOpacity>
-      </View>
       <View style={[styles.searchContainer, global.shadowDark]}>
         <ChooseCategory setResultData={setResultData} />
       </View>
       <View style={styles.resultContainer}>
-        <FlatList
-          data={resultData}
-          keyExtractor={(item) => item.Tid}
-          renderItem={renderItem}
-        ></FlatList>
+        {resultData.length === 0 ? (
+          <Text style={styles.noResTxt}>No result</Text>
+        ) : (
+          <FlatList
+            data={resultData}
+            keyExtractor={(item) => item.Tid}
+            renderItem={renderItem}
+          ></FlatList>
+        )}
       </View>
     </View>
   );
@@ -70,6 +63,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     flex: 3,
+    marginTop: 30,
     backgroundColor: root.light,
     paddingBottom: 15,
   },
@@ -77,5 +71,10 @@ const styles = StyleSheet.create({
   resultContainer: {
     flex: 8,
     paddingTop: 15,
+  },
+  noResTxt: {
+    width: "100%",
+    height: "100%",
+    textAlign: "center",
   },
 });
