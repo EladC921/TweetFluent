@@ -64,7 +64,7 @@ function Tabs({ navigation }) {
       />
       <Tab.Screen
         name="Profile"
-        children={() => <Profile />}
+        children={() => <Profile navigation={navigation} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>

@@ -6,38 +6,51 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 // logo
 import logo from "../../assets/logo.png";
 // Global Styles
 import global from "../../styles/global";
 import root from "../../styles/root.json";
 import { Icon } from "react-native-elements";
-// const tweets - mock data
-// import { tweets } from "../../mockData/tweets";
+// navigation
+import { useFocusEffect } from "@react-navigation/native";
 // Components
 import Tweet from "../Tweet";
 // Serverside
 import { TweetsService } from "../../server/TweetsService";
 import { ErrorHandler } from "../../server/ErrorHandler";
-
-// Redner Tweets
-const renderItem = ({ item }) => <Tweet key={item.TweetId} tweet={item} />;
+import { getCurrentUser } from "../../data/CurrentUser";
+// Components
+import FilterBar from "./FilterBar";
 
 const Home = ({ navigation }) => {
   const [tweets, setTweets] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [filteredTweets, setFilteredTweets] = useState([]);
 
-  useEffect(() => {
-    // Get Tweets of Influencers that a user follows
-    let tweetsForUser = new TweetsService(`/TweetsForUser/1`);
-    tweetsForUser
-      .getAll()
-      .then((res) => {
-        setTweets(res);
-      })
-      .catch((err) => new ErrorHandler(err).log());
-  }, []);
+  // Redner Tweets
+  const renderItem = ({ item }) => <Tweet key={item.TweetId} tweet={item} />;
+
+  useFocusEffect(
+    useCallback(() => {
+      // Get Tweets of Influencers that a user follows
+      getCurrentUser()
+        .then(result => {
+          return result;
+        }).then(result => {
+          let tweetsForUser = new TweetsService(`/TweetsForUser/${result.uid}`);
+          tweetsForUser.getAll()
+            .then((res) => {
+              setTweets(res);
+              setFilteredTweets(res);
+            })
+            .then(() => setLoading(false))
+            .catch((err) => new ErrorHandler(err).log())
+        })
+        .catch(err => new ErrorHandler(err).log())
+    }, [])
+  );
 
   return (
     <View style={styles.wrapper}>
@@ -62,10 +75,7 @@ const Home = ({ navigation }) => {
       </View>
       <View style={styles.body}>
         <View style={styles.bodyTitleContainer}>
-          <Text style={styles.bodyTitle}>Check out new tweets!</Text>
-          <TouchableOpacity style={styles.filterBtn}>
-            <Text style={styles.filterBtnText}>Filter</Text>
-          </TouchableOpacity>
+          <FilterBar tweets={tweets} setFilteredTweets={setFilteredTweets} />
         </View>
         <View style={styles.tweetsWrapper}>
           <View style={styles.tweetsContainer}>
@@ -79,13 +89,15 @@ const Home = ({ navigation }) => {
                 />
               </View>
             ) : (
-              tweets.length > 0 && (
-                <FlatList
-                  data={tweets}
+              (tweets || tweets.length > 0) ?
+                (<FlatList
+                  removeClippedSubviews={false}
+                  data={filteredTweets}
                   keyExtractor={(item) => item.TweetId}
                   renderItem={renderItem}
-                />
-              )
+                />)
+                :
+                (<Text>You haven't subscribed anyone yet!</Text>)
             )}
           </View>
         </View>
@@ -137,44 +149,16 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 
-  filterBtn: {
-    backgroundColor: root.twitter,
-    padding: 7,
-    borderRadius: 30,
-    marginLeft: "auto",
-    marginTop: 5,
-    width: "auto",
-  },
-
-  filterBtnText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingRight: 10,
-    paddingLeft: 10,
-  },
-
   body: {
     flex: 10,
     height: "100%",
   },
 
   bodyTitleContainer: {
-    paddingTop: "5%",
-    paddingLeft: "5%",
-    paddingRight: "5%",
+    position: "relative",
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "flex-start",
-    flexWrap: "wrap",
-  },
-
-  bodyTitle: {
-    color: root.secondary,
-    fontSize: 16,
-    fontWeight: "600",
   },
 
   tweetsWrapper: {

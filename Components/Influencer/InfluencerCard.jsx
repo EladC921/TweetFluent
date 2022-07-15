@@ -1,21 +1,43 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // global styles
 import global from "../../styles/global";
 import root from "../../styles/root";
 // Serverside
 import { InfluencerService } from "../../server/InfluencerService";
 import { ErrorHandler } from "../../server/ErrorHandler";
+import { UsersService } from "../../server/UsersService";
+import { getCurrentUser } from "../../data/CurrentUser";
 
 const InfluencerCard = ({ navigation, influencer }) => {
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(result => setUser(result))
+      .catch(err => new ErrorHandler(err).log());
+  }, []);
+
+
   const goToInfluencerPage = () => {
-    let t = new InfluencerService(`/GetInfluencer`);
-    // Navigate to Influencer Page with his tweets and details
-    t.get(influencer.Id)
+    let i = new InfluencerService(`/GetInfluencer`);
+    let u = new UsersService(`/isSubscribe`);
+    let influ = {};
+    let isSubscribe = false;
+
+    let getInflu = i.get(influencer.Id)
       .then((res) => {
-        navigation.navigate("InfluencerProfile", { res });
-      })
-      .catch((err) => new ErrorHandler(err).log());
+        influ = res;
+      });
+    let getIsSubscribe = u.getIsSubscribe(user.uid, influencer.Id)
+      .then(res => {
+        isSubscribe = res;
+      });
+
+    // Navigate to Influencer Page 
+    Promise.all([getInflu, getIsSubscribe]).then(() => {
+      navigation.navigate("InfluencerProfile", { influencer: influ, isSubscribe: isSubscribe, uid: user.uid });
+    }).catch(err => new ErrorHandler(err).log());
   };
 
   return (
@@ -59,8 +81,8 @@ const InfluencerCard = ({ navigation, influencer }) => {
               <Text style={styles.footerTxt}>Following</Text>
             </View>
             <View style={styles.icon}>
-              <Text style={styles.iconTxt}>0</Text>
-              <Text style={styles.footerTxt}>subscribers</Text>
+              <Text style={styles.iconTxt}>{influencer.SubscribersCount}</Text>
+              <Text style={styles.footerTxt}>Subscribers</Text>
             </View>
           </View>
         </View>

@@ -15,24 +15,24 @@ import Register from "./Register";
 // firebase
 import { auth } from "../../server/firebase";
 // server & data
-import { UsersService, ErrorHandler } from "../../server/UsersService";
-import { CurrentUser } from "../../data/CurrentUser";
+import { UsersService } from "../../server/UsersService";
+import { getCurrentUser, setCurrentUser, ConstUser } from "../../data/CurrentUser";
+import { ErrorHandler } from "../../server/ErrorHandler";
 
 const Login = ({ navigation }) => {
   const [uname, setUname] = useState('');
   const [pass, setPass] = useState('');
   const [authFinished, setAuthFinished] = useState(false);
-  let userAuthEmail = "";
+  const [userAuthEmail, setUserAuthEmail] = useState("");
 
   // TODO:Elad - check if login works && build User serveside
   const handleLogin = () => {
     auth.signInWithEmailAndPassword(uname, pass)
       .then(userCredentials => {
         const user = userCredentials.user;
-        console.log('Logged in with: ', user.email);
-        userAuthEmail = user.email;
-        setAuthFinished(true);
+        setUserAuthEmail(user.email);
       })
+      .then(() => setAuthFinished(true))
       .catch(error => alert(error.message));
   }
 
@@ -40,23 +40,38 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        console.log('Logged in with: ', user.email);
-        userAuthEmail = user.email;
-        setAuthFinished(true);
+        setUserAuthEmail(user.email);
+        setTimeout(() => setAuthFinished(true));
       }
 
       return unsubscribe;
     });
   }, []);
 
+  const setLoggedInUser = (user) => {
+    let _user = {
+      uid: user.Uid,
+      firstName: user.FirstName,
+      lastName: user.LastName,
+      displayName: user.TwitterScreenName,
+      email: user.Email,
+      country: user.Country
+    };
+    setCurrentUser(_user)
+      .then(() => setAuthFinished(false))
+      .catch(err => new ErrorHandler(err).log());
+  }
+
   // get User details and navigate to app
   useEffect(() => {
     if (authFinished) {
-      us = new UsersService();
+      let us = new UsersService("/login");
       us.get(userAuthEmail).then(res => {
-        new CurrentUser(res.Uid, res.Email, res.FirstName, res.LastName, res.DisplayName); // TODO:Elad - check the namings of the variables in the server
-        navigation.navigate("Main");
+        setLoggedInUser(res);
       })
+        .then(() => {
+          navigation.navigate("Main");
+        })
         .catch(err => new ErrorHandler(err).log());
     }
   }, [authFinished]);

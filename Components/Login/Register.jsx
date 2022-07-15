@@ -17,6 +17,8 @@ import React, { useState } from 'react'
 import root from "../../styles/root.json";
 // firebase
 import { auth } from "../../server/firebase";
+// server & data
+import { UsersService, ErrorHandler } from "../../server/UsersService";
 
 const Register = () => {
   const [signnickname, setSignNickname] = useState();
@@ -25,6 +27,7 @@ const Register = () => {
   const [signmail, setSignupmail] = useState();
   const [csignpass, setcpass] = useState();
   const [signpass, setsignpass] = useState();
+  const [signcountry, setSignCountry] = useState();
   const [openModal, setOpenModal] = useState(false);
 
 
@@ -44,8 +47,8 @@ const Register = () => {
       return;
     }
 
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-    if (!regex.test(signmail)) {
+    const mailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    if (!mailRegex.test(signmail)) {
       alert("Please enter a valid email address");
       return;
     }
@@ -55,11 +58,29 @@ const Register = () => {
     auth.createUserWithEmailAndPassword(signmail, signpass)
       .then(userCredentials => {
         const user = userCredentials.user;
-        console.log(user.email);
         validateSignUp();
+      })
+      .then(() => {
+        createUser();
         setOpenModal(false);
       })
       .catch(error => alert(error.message));
+  }
+
+  const createUser = () => {
+    us = new UsersService();
+    let user = {
+      firstName: signfirstname,
+      lastName: signlastname,
+      twitterScreenName: signnickname,
+      email: signmail,
+      country: signcountry,
+    }
+    us.post(user)
+      .then(res => {
+        alert("User created successfully");
+      })
+      .catch(err => new ErrorHandler(err).log());
   }
 
   return (
@@ -122,6 +143,13 @@ const Register = () => {
                 placeholderTextColor={root.tertiary}
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setSignNickname(text)} />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput style={styles.inputs}
+                placeholder="Country"
+                placeholderTextColor={root.tertiary}
+                underlineColorAndroid='transparent'
+                onChangeText={(text) => setSignCountry(text)} />
             </View>
             <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={handleSignUp}>
               <Text style={styles.signUpText}>Sign up</Text>
