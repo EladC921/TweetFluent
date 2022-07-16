@@ -18,9 +18,9 @@ const Search = ({ navigation }) => {
   const [resultData, setResultData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <View style={{ marginRight: 10, marginLeft: 10 }}>
-      <InfluencerCard influencer={item} navigation={navigation} />
+      <InfluencerCard influencer={item} navigation={navigation} key={index} />
     </View>
   );
   return (
