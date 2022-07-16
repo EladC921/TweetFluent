@@ -85,9 +85,10 @@ const styles = StyleSheet.create({
     backgroundColor: root.twitter,
   },
   searchContainer: {
-    flex: 2.5,
     backgroundColor: root.light,
     paddingBottom: 15,
+    paddingTop: "5%",
+    paddingBottom: "8%",
   },
 
   resultContainer: {
