@@ -18,7 +18,6 @@ const ChooseCategory = (props) => {
     { label: "Cellular", value: "cellular" },
     { label: "Cameras", value: "cameras" },
   ];
-  const Country = [{ label: "Any", value: "any" }];
 
   const [currentCategoryVal, setCurrentCategoryVal] = useState(
     CategoryType[0].value
@@ -91,6 +90,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+
   dropdownContainer: {
     flex: 2,
     display: "flex",
@@ -98,18 +98,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 15,
   },
+
   btnContainer: {
     flex: 1,
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
   },
+
   inputLabel: {
     color: root.secondary,
     fontWeight: "600",
     paddingTop: 10,
     paddingBottom: 5,
   },
+
   dropdown: {
     width: "100%",
     height: 45,
@@ -119,10 +122,12 @@ const styles = StyleSheet.create({
     borderColor: root.tertiary,
     backgroundColor: root.bg,
   },
+
   selectedTextStyle: {
     color: "#676767",
     fontWeight: "600",
   },
+
   searchBtn: {
     backgroundColor: root.twitter,
     borderRadius: 20,
@@ -133,9 +138,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 12,
   },
+
   btnsText: {
     color: "white",
     fontSize: 17,
   },
+
   inputSearchStyle: {},
 });
