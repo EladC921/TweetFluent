@@ -4,8 +4,8 @@ import React, { Component } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // Components
 import Home from "../Home";
+import Notifications from "../Notifications/Notifications";
 import Profile from "../User/UserProfile";
-import Search from "../Search";
 // External
 import { Icon } from "react-native-elements";
 
@@ -20,20 +20,20 @@ function Tabs({ navigation }) {
       }}
     >
       <Tab.Screen
-        name="Search"
-        children={() => <Search />}
+        name="Notifications"
+        children={() => <Notifications />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
               <Icon
-                name="search"
+                name="notifications"
                 type="ionicon"
                 iconStyle={styles.iconsStyle}
               />
             ) : (
               <Icon
-                name="search-outline"
+                name="notifications-outline"
                 type="ionicon"
                 iconStyle={styles.iconsStyle}
               />
