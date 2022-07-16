@@ -98,7 +98,7 @@ const FilterBar = (props) => {
                     // styleDropdownMenu={styles.dropdown}
                     // styleDropdownMenu={styles.dropdown}
                     styleItemsContainer={styles.dropdown}
-                    styleIndicator={styles.dropdownText}
+                    // styleIndicator={styles.dropdownText}
                     submitButtonText="Apply filter"
                     submitButtonColor={root.twitter}
                     searchInputStyle={styles.searchInputStyle}
@@ -119,7 +119,7 @@ const FilterBar = (props) => {
                     // styleDropdownMenu={styles.dropdown}
                     // styleDropdownMenu={styles.dropdown}
                     styleItemsContainer={styles.dropdown}
-                    styleIndicator={styles.dropdownText}
+                    // styleIndicator={styles.dropdownText}
                     submitButtonText="Apply filter"
                     submitButtonColor={root.twitter}
                     searchInputStyle={styles.searchInputStyle}

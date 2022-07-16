@@ -23,10 +23,8 @@ const ChooseCategory = (props) => {
   const [currentCategoryVal, setCurrentCategoryVal] = useState(
     CategoryType[0].value
   );
-  const [currentCountryVal, setCurrentCountryVal] = useState(Country[0].value);
 
   const [isFocusCategory, setIsFocusCategory] = useState(false);
-  const [isFocusCountry, setIsFocusCountry] = useState(false);
 
   const searchInfluencers = () => {
     props.setLoading(true);
@@ -71,26 +69,6 @@ const ChooseCategory = (props) => {
             setIsFocusCategory(false);
           }}
         />
-        <Text style={styles.inputLabel}>Choose Country</Text>
-        <Dropdown
-          style={[
-            styles.dropdown,
-            isFocusCountry && { borderColor: root.twitter },
-          ]}
-          inputSearchStyle={styles.inputSearchStyle}
-          data={Country}
-          maxHeight={150}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocusCountry ? currentCountryVal : "select"}
-          value={currentCountryVal}
-          onFocus={() => setIsFocusCountry(true)}
-          onBlur={() => setIsFocusCountry(false)}
-          onChange={(item) => {
-            setCurrentCountryVal(item.value);
-            setIsFocusCountry(false);
-          }}
-        />
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity
@@ -111,6 +89,7 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
   },
   dropdownContainer: {
     flex: 2,
