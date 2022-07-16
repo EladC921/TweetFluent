@@ -14,9 +14,9 @@ import root from "../../styles/root";
 import global from "../../styles/global";
 
 import InfluencerCard from "../Influencer/InfluencerCard";
-const renderItem = ({ item }) => (
+const renderItem = ({ item ,index}) => (
   <View style={{ marginRight: 10, marginLeft: 10 }}>
-    <InfluencerCard influencer={item} />
+    <InfluencerCard influencer={item} key={index} />
   </View>
 );
 
