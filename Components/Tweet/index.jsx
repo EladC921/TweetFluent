@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 // global styles
 import global from "../../styles/global";
 import root from "../../styles/root";
@@ -75,6 +75,8 @@ const Tweet = (props) => {
   const mediaUrl = {
     uri: tweet.MediaUrl,
   };
+
+  
   return (
     <View style={global.shadowDark}>
       <View style={styles.wrapper}>
@@ -145,14 +147,6 @@ const Tweet = (props) => {
               />
               <Text style={styles.iconTxt}>{tweet.LikesCount}</Text>
             </View>
-            <View style={styles.icon}>
-              <Icon
-                name="external-link"
-                type="evilicon"
-                color={root.secondary}
-                iconStyle={{ fontWeight: "1600", fontSize: 25 }}
-              />
-            </View>
           </View>
         </View>
       </View>
@@ -205,6 +199,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontFamily: "HiraginoSans-W3",
     fontSize: 12,
+    fontWeight: "600",
   },
 
   rightContainer: {

@@ -21,7 +21,7 @@ function Tabs({ navigation }) {
     >
       <Tab.Screen
         name="Search"
-        children={() => <Search />}
+        children={() => <Search navigation={navigation} />}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) =>

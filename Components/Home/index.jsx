@@ -150,6 +150,8 @@ const styles = StyleSheet.create({
 
   tweetsWrapper: {
     width: "100%",
+    marginTop: "20%",
+    zIndex: -1,
     justifyContent: "center",
     alignItems: "center",
   },
