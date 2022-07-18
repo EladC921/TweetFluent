@@ -14,10 +14,9 @@ const InfluencerCard = ({ navigation, influencer }) => {
 
   useEffect(() => {
     getCurrentUser()
-      .then(result => setUser(result))
-      .catch(err => new ErrorHandler(err).log());
+      .then((result) => setUser(result))
+      .catch((err) => new ErrorHandler(err).log());
   }, []);
-
 
   const goToInfluencerPage = () => {
     let i = new InfluencerService(`/GetInfluencer`);
@@ -25,19 +24,25 @@ const InfluencerCard = ({ navigation, influencer }) => {
     let influ = {};
     let isSubscribe = false;
 
-    let getInflu = i.get(influencer.Id)
+    let getInflu = i.get(influencer.Id).then((res) => {
+      influ = res;
+    });
+    let getIsSubscribe = u
+      .getIsSubscribe(user.uid, influencer.Id)
       .then((res) => {
-        influ = res;
-      });
-    let getIsSubscribe = u.getIsSubscribe(user.uid, influencer.Id)
-      .then(res => {
         isSubscribe = res;
       });
 
-    // Navigate to Influencer Page 
-    Promise.all([getInflu, getIsSubscribe]).then(() => {
-      navigation.navigate("InfluencerProfile", { influencer: influ, isSubscribe: isSubscribe, uid: user.uid });
-    }).catch(err => new ErrorHandler(err).log());
+    // Navigate to Influencer Page
+    Promise.all([getInflu, getIsSubscribe])
+      .then(() => {
+        navigation.navigate("InfluencerProfile", {
+          influencer: influ,
+          isSubscribe: isSubscribe,
+          uid: user.uid,
+        });
+      })
+      .catch((err) => new ErrorHandler(err).log());
   };
 
   return (

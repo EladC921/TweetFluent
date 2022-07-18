@@ -16,29 +16,34 @@ import Register from "./Register";
 import { auth } from "../../server/firebase";
 // server & data
 import { UsersService } from "../../server/UsersService";
-import { getCurrentUser, setCurrentUser, ConstUser } from "../../data/CurrentUser";
+import {
+  getCurrentUser,
+  setCurrentUser,
+  ConstUser,
+} from "../../data/CurrentUser";
 import { ErrorHandler } from "../../server/ErrorHandler";
 
 const Login = ({ navigation }) => {
-  const [uname, setUname] = useState('');
-  const [pass, setPass] = useState('');
+  const [uname, setUname] = useState("");
+  const [pass, setPass] = useState("");
   const [authFinished, setAuthFinished] = useState(false);
   const [userAuthEmail, setUserAuthEmail] = useState("");
 
   // TODO:Elad - check if login works && build User serveside
   const handleLogin = () => {
-    auth.signInWithEmailAndPassword(uname, pass)
-      .then(userCredentials => {
+    auth
+      .signInWithEmailAndPassword(uname, pass)
+      .then((userCredentials) => {
         const user = userCredentials.user;
         setUserAuthEmail(user.email);
       })
       .then(() => setAuthFinished(true))
-      .catch(error => alert(error.message));
-  }
+      .catch((error) => alert(error.message));
+  };
 
   // if user is already logged in
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUserAuthEmail(user.email);
         setTimeout(() => setAuthFinished(true));
@@ -55,24 +60,25 @@ const Login = ({ navigation }) => {
       lastName: user.LastName,
       displayName: user.TwitterScreenName,
       email: user.Email,
-      country: user.Country
+      country: user.Country,
     };
     setCurrentUser(_user)
       .then(() => setAuthFinished(false))
-      .catch(err => new ErrorHandler(err).log());
-  }
+      .catch((err) => new ErrorHandler(err).log());
+  };
 
   // get User details and navigate to app
   useEffect(() => {
     if (authFinished) {
       let us = new UsersService("/login");
-      us.get(userAuthEmail).then(res => {
-        setLoggedInUser(res);
-      })
+      us.get(userAuthEmail)
+        .then((res) => {
+          setLoggedInUser(res);
+        })
         .then(() => {
           navigation.navigate("Main");
         })
-        .catch(err => new ErrorHandler(err).log());
+        .catch((err) => new ErrorHandler(err).log());
     }
   }, [authFinished]);
 
