@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   Linking,
+  ScrollView
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Icon } from "react-native-elements";
@@ -59,6 +60,7 @@ const InfluencerProfile = ({ route }) => {
           <Text>filter</Text>
         </TouchableOpacity> */}
         <FlatList
+          nestedScrollEnabled
           data={tweets}
           renderItem={renderTweets}
           keyExtractor={(item) => item.TweetId}
@@ -91,98 +93,93 @@ const InfluencerProfile = ({ route }) => {
 
   return (
     <View style={styles.influencerContainer}>
-      <View style={[styles.headerContainer, global.shadowDark]}>
-        <View style={styles.headerNav}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            style={styles.goBackBtn}
-            onPress={() => {
-              if (navigation.canGoBack()) {
-                navigation.goBack();
-              }
-            }}
-          >
-            <Icon
-              name="chevron-back-outline"
-              type="ionicon"
-              color="white"
-              iconStyle={{ fontWeight: "1600" }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.hederSec1}>
-          <View style={styles.hederSec1Child}>
-            <Text style={styles.numOfFollow}>
-              {influencerData.FollowersCount}
+      <View style={styles.headerNav}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={styles.goBackBtn}
+          onPress={() => {
+            if (navigation.canGoBack()) {
+              navigation.goBack();
+            }
+          }}
+        >
+          <Icon
+            name="chevron-back-outline"
+            type="ionicon"
+            color="white"
+            iconStyle={{ fontWeight: "1600" }}
+          />
+        </TouchableOpacity>
+      </View>
+      <ScrollView>
+        <View style={[styles.headerContainer, global.shadowDark]}>
+          <View style={styles.hederSec1}>
+            <View style={styles.hederSec1Child}>
+              <Text style={styles.numOfFollow}>
+                {influencerData.FollowersCount}
+              </Text>
+              <Text style={styles.follow}>Followers</Text>
+            </View>
+            <View style={styles.hederSec1Child}>
+              <Image
+                style={[styles.profileImg, global.shadowDark]}
+                source={{
+                  uri: influencerData.ImgUrl,
+                }}
+              />
+            </View>
+            <View style={styles.hederSec1Child}>
+              <Text style={styles.numOfFollow}>
+                {influencerData.FollowingCount}
+              </Text>
+              <Text style={styles.follow}>Following</Text>
+            </View>
+          </View>
+          <View style={styles.hederSec2}>
+            <Text style={[styles.hederSec2Child, styles.influencerName]}>
+              {influencerData.Name}
             </Text>
-            <Text style={styles.follow}>Followers</Text>
-          </View>
-          <View style={styles.hederSec1Child}>
-            <Image
-              style={[styles.profileImg, global.shadowDark]}
-              source={{
-                uri: influencerData.ImgUrl,
-              }}
-            />
-          </View>
-          <View style={styles.hederSec1Child}>
-            <Text style={styles.numOfFollow}>
-              {influencerData.FollowingCount}
+            <Text style={[styles.hederSec2Child, styles.influencerBio]}>
+              {influencerData.Bio}
             </Text>
-            <Text style={styles.follow}>Following</Text>
+          </View>
+          <View style={styles.hederSec3}>
+            <TouchableOpacity activeOpacity={0.5} style={styles.hederSec3Child} onPress={toggleSubscribe}>
+              <Text style={styles.btnsText}>{isSubscribed ? "Unsubscribe" : "Subscribe"}</Text>
+            </TouchableOpacity>
           </View>
         </View>
+        <View style={styles.contentContainer}>
+          <View style={styles.contentNav}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => setIsCategories(true)}
+              style={isCategories ? styles.nonActiveStyle : styles.activeStlye}
+            >
+              <Text
+                style={isCategories ? styles.contentBtn : styles.activeContentBtn}
+              >
+                Categories
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => setIsCategories(false)}
+              style={isCategories ? styles.activeStlye : styles.nonActiveStyle}
+            >
+              <Text
+                style={isCategories ? styles.activeContentBtn : styles.contentBtn}
+              >
+                Tweets
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.content}>
+            {isCategories ? renderPieData() : renderTweetsData()}
+          </View>
+        </View>
+      </ScrollView>
 
-        <View style={styles.hederSec2}>
-          <Text style={[styles.hederSec2Child, styles.influencerName]}>
-            {influencerData.Name}
-          </Text>
-          <Text style={[styles.hederSec2Child, styles.influencerBio]}>
-            {influencerData.Bio}
-          </Text>
-        </View>
-        <View style={styles.hederSec3}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            style={[styles.hederSec3Child]}
-            onPress={() => goToTwitter()}
-          >
-            <Text style={styles.btnsText}>Twitter</Text>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.5} style={styles.hederSec3Child} onPress={toggleSubscribe}>
-            <Text style={styles.btnsText}>{isSubscribed ? "Unsubscribe" : "Subscribe"}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.contentContainer}>
-        <View style={styles.contentNav}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => setIsCategories(true)}
-            style={isCategories ? styles.nonActiveStyle : styles.activeStlye}
-          >
-            <Text
-              style={isCategories ? styles.contentBtn : styles.activeContentBtn}
-            >
-              Categories
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => setIsCategories(false)}
-            style={isCategories ? styles.activeStlye : styles.nonActiveStyle}
-          >
-            <Text
-              style={isCategories ? styles.activeContentBtn : styles.contentBtn}
-            >
-              Tweets
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.content}>
-          {isCategories ? renderPieData() : renderTweetsData()}
-        </View>
-      </View>
     </View>
   );
 };
@@ -197,36 +194,46 @@ const styles = StyleSheet.create({
   headerContainer: {
     flex: 1,
     display: "flex",
-    paddingTop: "10%",
+    paddingTop: "15%",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: root.twitter,
+
   },
   contentContainer: {
     flex: 1.5,
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "white",
   },
   contentNav: {
+    paddingTop: 10,
     flex: 1,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
   },
   content: {
-    flex: 11,
+    paddingTop: 15,
+    paddingHorizontal: 5,
+    marginTop: "3%",
+    backgroundColor: "white",
   },
   nonActiveStyle: {
     flex: 1,
-    borderTopColor: "transparent",
+    borderColor: "transparent",
     backgroundColor: root.twitter,
+    borderRadius: 50,
+    marginLeft: 5,
+    marginRight: 5,
   },
   activeStlye: {
     flex: 1,
     borderColor: root.twitter,
-    borderBottomWidth: 2,
+    borderWidth: 1,
     backgroundColor: "white",
+    borderRadius: 50,
+    marginLeft: 5,
+    marginRight: 5,
   },
   contentBtn: {
     padding: 5,
@@ -241,15 +248,18 @@ const styles = StyleSheet.create({
     color: root.twitter,
   },
   headerNav: {
-    flex: 1,
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    position: "absolute",
+    paddingTop: "15%",
     paddingLeft: "5%",
+    zIndex: 1,
   },
-  goBackBtn: {},
+  goBackBtn: {
+    left: "10%",
+    bottom: "-50%",
+    backgroundColor: "rgba(0,0,0,0.2)",
+    borderRadius: 50,
+    paddingVertical: 5,
+  },
   hederSec1: {
     flex: 4,
     display: "flex",
@@ -283,6 +293,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   hederSec2: {
+    paddingTop: 10,
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -309,7 +320,7 @@ const styles = StyleSheet.create({
     flex: 1.5,
     display: "flex",
     flexDirection: "row",
-    width: "100%",
+    width: "50%",
   },
   hederSec3Child: {
     textAlign: "center",
