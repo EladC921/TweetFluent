@@ -25,16 +25,7 @@ const Search = ({ navigation }) => {
   );
   return (
     <View style={styles.wrapper}>
-      <View style={styles.backBtnContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon
-            name="chevron-back-outline"
-            type="ionicon"
-            color="black"
-            iconStyle={{ fontWeight: "1600" }}
-          />
-        </TouchableOpacity>
-      </View>
+      <View style={styles.backBtnContainer}></View>
       <View style={[styles.searchContainer, global.shadowDark]}>
         <ChooseCategory setResultData={setResultData} setLoading={setLoading} />
       </View>

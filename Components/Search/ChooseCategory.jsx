@@ -13,10 +13,10 @@ const ChooseCategory = (props) => {
     { label: "Whisky", value: "whisky" },
     { label: "Wine", value: "wine" },
     { label: "Makeup", value: "makeup" },
-    { label: "Computers", value: "copmuter" },
-    { label: "Cocktails", value: "cocktails" },
+    { label: "Computers", value: "computer" },
+    { label: "Cocktails", value: "cocktail" },
     { label: "Cellular", value: "cellular" },
-    { label: "Cameras", value: "cameras" },
+    { label: "Cameras", value: "camera" },
   ];
 
   const [currentCategoryVal, setCurrentCategoryVal] = useState(

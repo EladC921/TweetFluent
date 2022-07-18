@@ -36,19 +36,21 @@ const Home = ({ navigation }) => {
     useCallback(() => {
       // Get Tweets of Influencers that a user follows
       getCurrentUser()
-        .then(result => {
+        .then((result) => {
           return result;
-        }).then(result => {
+        })
+        .then((result) => {
           let tweetsForUser = new TweetsService(`/TweetsForUser/${result.uid}`);
-          tweetsForUser.getAll()
+          tweetsForUser
+            .getAll()
             .then((res) => {
               setTweets(res);
               setFilteredTweets(res);
             })
             .then(() => setLoading(false))
-            .catch((err) => new ErrorHandler(err).log())
+            .catch((err) => new ErrorHandler(err).log());
         })
-        .catch(err => new ErrorHandler(err).log())
+        .catch((err) => new ErrorHandler(err).log());
     }, [])
   );
 
@@ -57,20 +59,6 @@ const Home = ({ navigation }) => {
       <View style={[styles.header, global.shadowDark]}>
         <View style={styles.logoContainer}>
           <Image source={logo} style={styles.logo} />
-        </View>
-        <View style={styles.searchContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Search");
-            }}
-          >
-            <Icon
-              name="search"
-              type="evilicon"
-              color={root.secondary}
-              iconStyle={{ fontWeight: "1600", fontSize: 40 }}
-            />
-          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.body}>
@@ -88,16 +76,15 @@ const Home = ({ navigation }) => {
                   iconStyle={{ fontWeight: "1600", fontSize: 40 }}
                 />
               </View>
+            ) : tweets || tweets.length > 0 ? (
+              <FlatList
+                removeClippedSubviews={false}
+                data={filteredTweets}
+                keyExtractor={(item) => item.TweetId}
+                renderItem={renderItem}
+              />
             ) : (
-              (tweets || tweets.length > 0) ?
-                (<FlatList
-                  removeClippedSubviews={false}
-                  data={filteredTweets}
-                  keyExtractor={(item) => item.TweetId}
-                  renderItem={renderItem}
-                />)
-                :
-                (<Text>You haven't subscribed anyone yet!</Text>)
+              <Text>You haven't subscribed anyone yet!</Text>
             )}
           </View>
         </View>
@@ -118,7 +105,7 @@ const styles = StyleSheet.create({
 
   header: {
     position: "relative",
-    backgroundColor: root.bg,
+    backgroundColor: root.twitter,
     paddingTop: "10%",
     flex: 1,
     height: "100%",
