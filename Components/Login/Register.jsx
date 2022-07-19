@@ -21,13 +21,11 @@ import { auth } from "../../server/firebase";
 import { UsersService, ErrorHandler } from "../../server/UsersService";
 
 const Register = () => {
-  const [signnickname, setSignNickname] = useState();
   const [signfirstname, setSignFirstName] = useState();
   const [signlastname, setSignLastName] = useState();
   const [signmail, setSignupmail] = useState();
   const [csignpass, setcpass] = useState();
   const [signpass, setsignpass] = useState();
-  const [signcountry, setSignCountry] = useState();
   const [openModal, setOpenModal] = useState(false);
 
 
@@ -37,7 +35,7 @@ const Register = () => {
       return;
     }
 
-    if (signnickname === "" || signfirstname === "" || signlastname === "" || signmail === "" || signpass === "" || csignpass === "") {
+    if (signfirstname === "" || signlastname === "" || signmail === "" || signpass === "" || csignpass === "") {
       alert("Please fill in all fields");
       return;
     }
@@ -68,13 +66,11 @@ const Register = () => {
   }
 
   const createUser = () => {
-    us = new UsersService();
+    let us = new UsersService();
     let user = {
       firstName: signfirstname,
       lastName: signlastname,
-      twitterScreenName: signnickname,
       email: signmail,
-      country: signcountry,
     }
     us.post(user)
       .then(res => {
@@ -136,20 +132,6 @@ const Register = () => {
                 secureTextEntry={true}
                 underlineColorAndroid='transparent'
                 onChangeText={(text) => setcpass(text)} />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput style={styles.inputs}
-                placeholder="Twitter Nickname"
-                placeholderTextColor={root.tertiary}
-                underlineColorAndroid='transparent'
-                onChangeText={(text) => setSignNickname(text)} />
-            </View>
-            <View style={styles.inputContainer}>
-              <TextInput style={styles.inputs}
-                placeholder="Country"
-                placeholderTextColor={root.tertiary}
-                underlineColorAndroid='transparent'
-                onChangeText={(text) => setSignCountry(text)} />
             </View>
             <TouchableHighlight style={[styles.buttonContainer, styles.signupButton]} onPress={handleSignUp}>
               <Text style={styles.signUpText}>Sign up</Text>
